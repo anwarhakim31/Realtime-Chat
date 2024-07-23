@@ -7,7 +7,6 @@ import PrivateRoute from "./routes/PrivateRoute";
 import { useSelector } from "react-redux";
 import { selectedUserData, setUserData } from "./store/slices/auth-slices";
 import { useEffect } from "react";
-import { toast } from "sonner";
 import { HOST } from "./utils/constant";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
