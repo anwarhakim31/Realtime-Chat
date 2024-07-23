@@ -34,7 +34,7 @@ export const signup = async (req, res, next) => {
 
     // const user = await newUser.save();
     res.cookie("jwt", createToken(email, user.id), {
-      maxAge: maxExp,
+      maxExp,
       secure: true,
       sameSite: "None",
     });
@@ -98,6 +98,28 @@ export const login = async (req, res, next) => {
         image,
         color,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserData = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+      throw new ResponseError(404, "User is not found.");
+    }
+
+    user.id = userId;
+
+    res.status(200).json({
+      succes: true,
+      message: "success get data",
+      user,
     });
   } catch (error) {
     next(error);
