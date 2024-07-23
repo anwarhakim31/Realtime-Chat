@@ -1,7 +1,10 @@
-import React from "react";
+import { selectedUserData } from "@/store/slices/auth-slices";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
-  return <div>Profile</div>;
+  const userData = useSelector(selectedUserData);
+
+  return <div>Profile id ={}</div>;
 };
 
 export default Profile;

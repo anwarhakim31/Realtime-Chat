@@ -4,19 +4,93 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Background from "../../assets/login2.png";
+import { toast } from "sonner";
+import { HOST } from "@/utils/constant";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserData } from "@/store/slices/auth-slices";
+import { Loader2 } from "lucide-react";
 
 const Auth = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPasswod] = useState("");
+  const [activeTab, setActiveTab] = useState("Login");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {};
+  const dispatch = useDispatch();
 
-  const handleSignUp = async () => {};
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(HOST + "/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.errors);
+      }
+      console.log(data);
+
+      if (data.user.id) {
+        dispatch(setUserData(data.user));
+        data.user.profileSetup ? navigate("/chat") : navigate("/profile");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignUp = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(HOST + "/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email, password, confirmPassword }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.errors);
+      }
+
+      console.log(data);
+      // navigate("/profile");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if (activeTab === "Login") {
+        handleLogin();
+      } else if (activeTab === "SignUp") {
+        handleSignUp();
+      }
+    }
+  };
 
   return (
     <div className="h-[100vh] w-[100vw] flex items-center justify-center">
-      <div className="h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2">
+      <div className="min-h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2">
         <div className="flex flex-col gap-10 items-center justify-center w-full">
           <div className="flex items-center justify-center flex-col">
             <div className="flex items-center justify-center">
@@ -34,63 +108,104 @@ const Auth = () => {
             </p>
           </div>
           <div className="flex items-center justify-center w-full">
-            <Tabs className="w-3/4" defaultValue="Login">
-              <TabsList className="grid grid-cols-2 bg-transparent rounded-none w-full">
+            <Tabs
+              className="w-3/4"
+              defaultValue="Login"
+              onValueChange={setActiveTab}
+            >
+              <TabsList className="grid grid-cols-2 bg-transparent rounded-none">
                 <TabsTrigger
                   value="Login"
+                  disabled={loading}
                   className="data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none  data-[state=active]:text-black data-[state=active]:font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300 w-full"
                 >
                   Login
                 </TabsTrigger>
                 <TabsTrigger
                   value="SignUp"
+                  disabled={loading}
                   className="data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none  data-[state=active]:text-black data-[state=active]:font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300 w-full"
                 >
                   Signup
                 </TabsTrigger>
               </TabsList>
-              <TabsContent className="mt-10 flex flex-col gap-5" value="Login">
-                <Input
-                  type="email"
-                  placeholder={"Email"}
-                  className="rounded-full p-6"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <Input
-                  type="password"
-                  placeholder={"Password"}
-                  className="rounded-full p-6"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <Button className={"rounded-full p-6"} onClick={handleLogin}>
-                  Login
-                </Button>
+              <TabsContent className="mt-4" value="Login">
+                <div className="flex flex-col gap-5">
+                  <Input
+                    type="email"
+                    placeholder={"Email"}
+                    className="rounded-full p-6"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <Input
+                    type="password"
+                    placeholder={"Password"}
+                    className="rounded-full p-6"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <Button
+                    type={"submit"}
+                    className={"rounded-full p-6 disabled:bg-primary/100"}
+                    onClick={handleLogin}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Please wait
+                      </>
+                    ) : (
+                      "Login"
+                    )}
+                  </Button>
+                </div>
               </TabsContent>
-              <TabsContent className="mt-10 flex flex-col gap-5" value="SignUp">
-                <Input
-                  type="email"
-                  placeholder={"Email"}
-                  className="rounded-full p-6"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <Input
-                  type="password"
-                  placeholder={"Password"}
-                  className="rounded-full p-6"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <Input
-                  type="password"
-                  placeholder={"Confirm password"}
-                  className="rounded-full p-6"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPasswod(e.target.value)}
-                />
-                <Button className={"rounded-full p-6"}>Sign Up</Button>
+              <TabsContent className="mt-4 " value="SignUp">
+                <div className="flex flex-col gap-5">
+                  <Input
+                    type="email"
+                    placeholder={"Email"}
+                    className="rounded-full p-6"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <Input
+                    type="password"
+                    placeholder={"Password"}
+                    className="rounded-full p-6"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <Input
+                    type="password"
+                    placeholder={"Confirm password"}
+                    className="rounded-full p-6"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPasswod(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <Button
+                    type={"submit"}
+                    disabled={loading}
+                    className={"rounded-full p-6 disabled:bg-primary/90"}
+                    onClick={handleSignUp}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Please wait
+                      </>
+                    ) : (
+                      "Sign Up"
+                    )}
+                  </Button>
+                </div>
               </TabsContent>
             </Tabs>
           </div>
