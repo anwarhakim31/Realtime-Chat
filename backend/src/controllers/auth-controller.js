@@ -5,6 +5,7 @@ import { validate } from "../validations/validation.js";
 import {
   signUpValidate,
   signInValidate,
+  updateProvileValidate,
 } from "../validations/auth-validation.js";
 import { compare } from "bcrypt";
 
@@ -121,6 +122,32 @@ export const getUserData = async (req, res, next) => {
       message: "success get data",
       user,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateProfile = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    const { firstName, lastName, color } = req.body;
+
+    validate(updateProvileValidate, req.body);
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        firstName,
+        lastName,
+        color,
+        profileSetup: true,
+      },
+      { new: true, runValidators: true }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, message: "Successfuly save changes", user });
   } catch (error) {
     next(error);
   }

@@ -1,4 +1,4 @@
-import { selectedUserData } from "@/store/slices/auth-slices";
+import { selectedUserData, setUserData } from "@/store/slices/auth-slices";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,9 +11,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { HOST } from "@/utils/constant";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userData = useSelector(selectedUserData);
   const [form, setForm] = useState({
     firstName: "",
@@ -23,6 +26,17 @@ const Profile = () => {
   const [hovered, setHovered] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (userData.profileSetup) {
+      setForm({
+        ...form,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+      });
+      setSelectedColor(userData.color);
+    }
+  }, [userData]);
 
   const split = () => {
     const result = [];
@@ -40,8 +54,11 @@ const Profile = () => {
     setLoading(true);
     try {
       const res = await fetch(HOST + "/api/auth/update-profile", {
-        method: "PUT",
-        body: JSON.stringify({ ...form }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...form, color: selectedColor }),
         credentials: "include",
       });
 
@@ -49,6 +66,11 @@ const Profile = () => {
 
       if (!res.ok) {
         throw new Error(data.errors);
+      } else {
+        dispatch(setUserData(data.user));
+        toast.success(data.message);
+
+        navigate("/chat");
       }
     } catch (error) {
       toast.error(error.message);
@@ -57,12 +79,20 @@ const Profile = () => {
     }
   };
 
+  const handleBack = () => {
+    if (userData.profileSetup) {
+      navigate("/chat");
+    } else {
+      toast.error("Please continue to setup your profile.");
+    }
+  };
+
   return (
     <div className="bg-template h-[100vh] flex-center gap-10 flex-col">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
-        <div>
-          <ChevronLeft className="text-4xl w-[60px] h-[60px] text-white/90 cursor-pointer" />
-        </div>
+        <button onClick={handleBack}>
+          <ChevronLeft className="text-4xl w-[40px] h-[40px] text-white/90 cursor-pointer" />
+        </button>
         <div className="grid gap-5 md:grid-cols-2">
           <div
             className=" w-32 h-32 md:w-48 md:h-48 relative flex-center"
@@ -154,8 +184,9 @@ const Profile = () => {
         </div>
         <div className="w-full">
           <Button
-            className="h-16 w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300"
+            className="h-16 w-full bg-purple-700 hover:bg-purple-900 disabled:bg-purple-500 transition-all duration-300"
             onClick={handleSaveChange}
+            disabled={loading}
           >
             Save Changes
           </Button>

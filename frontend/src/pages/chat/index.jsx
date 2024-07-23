@@ -8,7 +8,6 @@ const Chat = () => {
   const userData = useSelector(selectedUserData);
   const navigate = useNavigate();
 
-  console.log(userData.profileSetup);
   useEffect(() => {
     if (!userData.profileSetup) {
       toast.error("Please setup profile to continue.");

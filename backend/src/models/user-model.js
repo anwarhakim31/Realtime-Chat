@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema({
     required: false,
   },
   color: {
-    type: String,
+    type: Number,
     required: false,
   },
   profileSetup: {
