@@ -220,6 +220,7 @@ const Profile = () => {
                 placeholder="First Name"
                 type="text"
                 value={form.firstName}
+                maxLength="10"
                 onChange={(e) =>
                   setForm((prevState) => ({
                     ...prevState,
@@ -233,6 +234,7 @@ const Profile = () => {
               <Input
                 placeholder="Last Name"
                 type="text"
+                maxLength="10"
                 value={form.lastName}
                 onChange={(e) =>
                   setForm((prevState) => ({

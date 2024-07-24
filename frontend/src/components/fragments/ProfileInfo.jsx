@@ -1,5 +1,6 @@
 import { getColor } from "@/lib/utils";
-import { selectedUserData } from "@/store/slices/auth-slices";
+import { selectedUserData, setUserData } from "@/store/slices/auth-slices";
+import { HOST } from "@/utils/constant";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { TooltipContent } from "@radix-ui/react-tooltip";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
@@ -9,6 +10,7 @@ import { EditIcon } from "lucide-react";
 import { CirclePower } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const ProfileInfo = () => {
   const navigate = useNavigate();
@@ -26,12 +28,25 @@ const ProfileInfo = () => {
     return result.join("");
   };
 
-  const handleLogout = () => {};
+  const handleLogout = async () => {
+    try {
+      const res = await fetch(HOST + "/api/auth/logout", {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        navigate("/auth");
+        setUserData(null);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <div className="absolute bottom-0 h-16 flex items-center justify-between px-10 w-full bg-[#2a2b33]">
       <div className="flex gap-3 items-center justify-center">
-        <div className="w-12 h-12 rounded-full overflow-hidden">
+        <div className="w-12 h-12 rounded-full">
           <Avatar>
             {userData.image ? (
               <AvatarImage
@@ -42,7 +57,7 @@ const ProfileInfo = () => {
               />
             ) : (
               <div
-                className={`uppercase h-12 w-12  text-5xl border flex-center rounded-full ${getColor(
+                className={`uppercase h-12 w-12  text-xs border flex-center rounded-full ${getColor(
                   userData.color
                 )}`}
               >
@@ -55,7 +70,7 @@ const ProfileInfo = () => {
         </div>
         <div>
           {userData.firstName && userData.lastName ? (
-            <span>{`${userData.firstName} ${userData.lastName}`}</span>
+            <span className="text-sm lg:text-base">{`${userData.firstName} ${userData.lastName}`}</span>
           ) : (
             ""
           )}

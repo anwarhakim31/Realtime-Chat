@@ -8,6 +8,7 @@ import {
   updateProfile,
   addProfileImage,
   removeProfileImage,
+  logout,
 } from "../controllers/auth-controller.js";
 
 const storage = multer.diskStorage({
@@ -35,5 +36,6 @@ authRoutes.post(
 );
 
 authRoutes.delete("/remove-profile-image", verifyToken, removeProfileImage);
+authRoutes.post("/logout", logout);
 
 export default authRoutes;

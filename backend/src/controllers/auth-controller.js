@@ -16,14 +16,14 @@ import resizeImage from "../util/resize-image.js";
 
 dotenv.config();
 
-const maxExp = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
+const maxAge = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
 
 const createToken = (email, userId) => {
   const secret = process.env.JWT_KEY;
   if (!secret) {
     throw new Error("JWT_KEY is not defined");
   }
-  return jwt.sign({ email, userId }, secret, { expiresIn: maxExp });
+  return jwt.sign({ email, userId }, secret, { expiresIn: maxAge });
 };
 
 export const signup = async (req, res, next) => {
@@ -47,7 +47,7 @@ export const signup = async (req, res, next) => {
 
     const user = await newUser.save();
     res.cookie("jwt", createToken(email, user.id), {
-      maxExp,
+      maxAge,
       secure: true,
       sameSite: "None",
     });
@@ -84,7 +84,7 @@ export const login = async (req, res, next) => {
     }
 
     res.cookie("jwt", createToken(email, user.id), {
-      maxExp,
+      maxAge,
       secure: true,
       sameSite: "None",
     });
@@ -224,7 +224,17 @@ export const removeProfileImage = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ success: 200, message: "Successfully remove image" });
+      .json({ success: true, message: "Successfully remove image" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 0, secure: true, sameSite: "None" });
+
+    res.status(200).json({ success: true, message: "Succsesfully logout." });
   } catch (error) {
     next(error);
   }
