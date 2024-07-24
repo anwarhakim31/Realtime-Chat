@@ -29,10 +29,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
 
   const fileInputRef = useRef();
-  console.log(userData);
+
   useEffect(() => {
     if (userData.profileSetup) {
-      console.log(true);
       setForm({
         ...form,
         firstName: userData.firstName,
@@ -120,8 +119,6 @@ const Profile = () => {
         });
 
         const data = await res.json();
-
-        console.log(data);
 
         if (res.ok && data.image) {
           dispatch(setUserData({ ...userData, image: data.image }));

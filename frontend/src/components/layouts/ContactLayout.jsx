@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "../ui/logo";
 import Title from "../elements/Title";
+import ProfileInfo from "../fragments/ProfileInfo";
 
 const ContactLayout = () => {
   return (
@@ -18,6 +19,7 @@ const ContactLayout = () => {
           <Title text="Channel" />
         </div>
       </div>
+      <ProfileInfo />
     </div>
   );
 };

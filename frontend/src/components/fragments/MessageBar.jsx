@@ -31,7 +31,7 @@ const MessageBar = () => {
       <div className="flex-1 flex bg-[#2a2b33] rounded-md items-center gap-6 pr-5">
         <input
           type="text"
-          className="flex-1 p-5 bg-transparent rounded-md focus:border-none focus:outline-none"
+          className="w-full p-5 bg-transparent rounded-md focus:border-none focus:outline-none"
           placeholder="Enter Message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
