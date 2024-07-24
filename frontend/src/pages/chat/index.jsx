@@ -21,7 +21,7 @@ const Chat = () => {
   return (
     <main className="flex h-screen text-white overflow-hidden">
       <ContactLayout />
-      <EmptyChatLayout />
+      {/* <EmptyChatLayout /> */}
       <ChatLayout />
     </main>
   );

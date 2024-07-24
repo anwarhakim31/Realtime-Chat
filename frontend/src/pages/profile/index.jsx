@@ -14,7 +14,6 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useRef } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Profile = () => {
   const navigate = useNavigate();
