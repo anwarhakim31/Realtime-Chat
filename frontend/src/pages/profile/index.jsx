@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useRef } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -120,6 +121,8 @@ const Profile = () => {
         });
 
         const data = await res.json();
+
+        console.log(data);
 
         if (res.ok && data.image) {
           dispatch(setUserData({ ...userData, image: data.image }));

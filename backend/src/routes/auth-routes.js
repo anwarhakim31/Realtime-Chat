@@ -1,7 +1,5 @@
 import express from "express";
 import multer from "multer";
-import multerS3 from "multer-s3";
-import s3 from "../aws.js"; // Import your S3 client configuration
 import { verifyToken } from "../middlewares/auth-middleware.js";
 import {
   signup,

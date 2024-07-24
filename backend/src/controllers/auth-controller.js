@@ -10,8 +10,9 @@ import {
 import { compare } from "bcrypt";
 import fs from "fs";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import s3 from "../aws.js";
+import s3 from "../util/aws.js";
 import dotenv from "dotenv";
+import resizeImage from "../util/resize-image.js";
 
 dotenv.config();
 
@@ -173,7 +174,9 @@ export const addProfileImage = async (req, res, next) => {
   const filePath = file.path;
 
   try {
-    const fileStream = fs.createReadStream(filePath);
+    const resizedFilePath = await resizeImage(filePath);
+
+    const fileStream = fs.createReadStream(resizedFilePath);
 
     const uploadParams = {
       Bucket: process.env.AWS_S3_BUCKET,
