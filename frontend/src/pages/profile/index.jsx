@@ -13,6 +13,7 @@ import { HOST } from "@/utils/constant";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useRef } from "react";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -27,14 +28,26 @@ const Profile = () => {
   const [selectedColor, setSelectedColor] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  const fileInputRef = useRef();
+  console.log(userData);
   useEffect(() => {
     if (userData.profileSetup) {
+      console.log(true);
       setForm({
         ...form,
         firstName: userData.firstName,
         lastName: userData.lastName,
       });
       setSelectedColor(userData.color);
+    }
+
+    if (userData.image) {
+      setForm({
+        ...form,
+        image: userData.image,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+      });
     }
   }, [userData]);
 
@@ -87,6 +100,57 @@ const Profile = () => {
     }
   };
 
+  const handleFileClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    setLoading(true);
+    if (file) {
+      const formData = new FormData();
+
+      formData.append("profile-image", file);
+
+      try {
+        const res = await fetch(HOST + "/api/auth/add-profile-image", {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.image) {
+          dispatch(setUserData({ ...userData, image: data.image }));
+        }
+        e.target.value = null;
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleDeleteImage = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(HOST + "/api/auth/remove-profile-image", {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        setForm({ ...form, image: "" });
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-template h-[100vh] flex-center gap-10 flex-col">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
@@ -105,6 +169,7 @@ const Profile = () => {
                   src={form.image}
                   alt="profile"
                   className={"object-cover w-full h-full bg-black"}
+                  loading="lazy"
                 />
               ) : (
                 <div
@@ -119,7 +184,10 @@ const Profile = () => {
               )}
             </Avatar>
             {hovered && (
-              <div className="absolute inset-0 flex-center bg-black/50 ring-fuchsia-50 rounded-full">
+              <div
+                className="absolute inset-0 flex-center bg-black/50 ring-fuchsia-50 rounded-full"
+                onClick={form.image ? handleDeleteImage : handleFileClick}
+              >
                 {form.image ? (
                   <Trash className="text-white w-[30px] h-[30px] cursor-pointer" />
                 ) : (
@@ -127,7 +195,16 @@ const Profile = () => {
                 )}
               </div>
             )}
-            {/* { <input type="text" /> } */}
+            {
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                className="opacity-0 w-full"
+                name="profile-image"
+                accept=".png, .jpg, .svg, .jpeg, .webp"
+              />
+            }
           </div>
           <div className="flex-center min-w-32 gap-5 md:min-w-64 flex-col text-white">
             <div className="w-full">

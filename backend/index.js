@@ -21,6 +21,8 @@ app.use(
   })
 );
 
+// app.use("uploads/profile", express.static("uploads/profiles"));
+
 app.use(cookieParser());
 app.use(express.json());
 

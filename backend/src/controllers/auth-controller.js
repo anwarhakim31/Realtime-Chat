@@ -8,6 +8,12 @@ import {
   updateProvileValidate,
 } from "../validations/auth-validation.js";
 import { compare } from "bcrypt";
+import fs from "fs";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import s3 from "../aws.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const maxExp = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
 
@@ -31,9 +37,14 @@ export const signup = async (req, res, next) => {
       throw new ResponseError(400, "Email has been taken");
     }
 
-    const user = await User.create({ email, password });
+    // const user = await User.create({ email, password });
 
-    // const user = await newUser.save();
+    const newUser = new User({
+      email,
+      password,
+    });
+
+    const user = await newUser.save();
     res.cookie("jwt", createToken(email, user.id), {
       maxExp,
       secure: true,
@@ -148,6 +159,69 @@ export const updateProfile = async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, message: "Successfuly save changes", user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addProfileImage = async (req, res, next) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "File is required." });
+  }
+
+  const file = req.file;
+  const filePath = file.path;
+
+  try {
+    const fileStream = fs.createReadStream(filePath);
+
+    const uploadParams = {
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: `profiles/${Date.now().toString()}-${file.originalname}`,
+      Body: fileStream,
+      ACL: "public-read",
+    };
+
+    const data = await s3.send(new PutObjectCommand(uploadParams));
+
+    fs.unlinkSync(filePath);
+
+    const fileName = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${uploadParams.Key}`;
+
+    const userUpdate = await User.findByIdAndUpdate(
+      { _id: req.userId },
+      { image: fileName },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Success upload image profile",
+      image: userUpdate.image,
+    });
+  } catch (error) {
+    console.error("Upload error:", error);
+    next(error);
+  }
+};
+
+export const removeProfileImage = async (req, res, next) => {
+  try {
+    const { userId } = req;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new ResponseError(404, "User is not found");
+    }
+
+    user.image = null;
+
+    await user.save();
+
+    res
+      .status(200)
+      .json({ success: 200, message: "Successfully remove image" });
   } catch (error) {
     next(error);
   }
