@@ -21,8 +21,12 @@ import { HOST } from "@/utils/constant";
 import { toast } from "sonner";
 import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarImage } from "../ui/avatar";
+import { useDispatch } from "react-redux";
+import { setChatData, setChatType } from "@/store/slices/chat-slices";
 
 const NewDm = () => {
+  const dispatch = useDispatch();
+
   const [openNewContactModal, setOpenNewContactModal] = useState(false);
   const [search, setSearch] = useState("");
   const [searchedContacts, setSearchedContacts] = useState([]);
@@ -75,6 +79,9 @@ const NewDm = () => {
 
   const selectNewContact = (contact) => {
     setOpenNewContactModal(false);
+    dispatch(setChatType("contact"));
+    dispatch(setChatData(contact));
+    setSearch("");
     setSearchedContacts([]);
   };
 
