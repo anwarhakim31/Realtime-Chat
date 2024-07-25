@@ -24,6 +24,18 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { useDispatch } from "react-redux";
 import { setChatData, setChatType } from "@/store/slices/chat-slices";
 
+export const splitName = (firstName, lastName) => {
+  const result = [];
+
+  const first = firstName.split("").shift();
+  const last = lastName.split("").shift();
+
+  result.push(first);
+  result.push(last);
+
+  return result.join("");
+};
+
 const NewDm = () => {
   const dispatch = useDispatch();
 
@@ -33,18 +45,6 @@ const NewDm = () => {
 
   const handleSearch = async (e) => {
     setSearch(e.target.value);
-  };
-
-  const splitName = (firstName, lastName) => {
-    const result = [];
-
-    const first = firstName.split("").shift();
-    const last = lastName.split("").shift();
-
-    result.push(first);
-    result.push(last);
-
-    return result.join("");
   };
 
   useEffect(() => {
@@ -119,7 +119,7 @@ const NewDm = () => {
 
           {searchedContacts.length <= 0 ? (
             <div>
-              <div className="flex-1 md:bg-template flex flex-col mt-5 justify-center items-center  duration-1000 transition-all">
+              <div className="flex-1 flex flex-col mt-5 justify-center items-center  duration-1000 transition-all">
                 <Lottie2
                   isClickToPauseDisabled={true}
                   height={100}
