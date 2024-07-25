@@ -21,8 +21,8 @@ const ProfileInfo = () => {
   const split = () => {
     const result = [];
 
-    const first = userData.firstName.split("").shift();
-    const last = userData.lastName.split("").shift();
+    const first = userData?.firstName.split("").shift();
+    const last = userData?.lastName.split("").shift();
 
     result.push(first);
     result.push(last);
@@ -64,7 +64,7 @@ const ProfileInfo = () => {
                   userData.color
                 )}`}
               >
-                {userData.firstName && userData.lastName
+                {userData?.firstName && userData?.lastName
                   ? split()
                   : userData.email.split("").shift()}
               </div>

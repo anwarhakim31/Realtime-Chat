@@ -11,10 +11,13 @@ const authSlice = createSlice({
     setUserData: (state, action) => {
       state.userData = action.payload;
     },
+    updateUserData: (state, action) => {
+      state.userData = { ...state.userData, status: action.payload };
+    },
   },
 });
 
-export const { setUserData } = authSlice.actions;
+export const { setUserData, updateUserData } = authSlice.actions;
 export default authSlice.reducer;
 
 export const selectedUserData = (state) => state.auth.userData;

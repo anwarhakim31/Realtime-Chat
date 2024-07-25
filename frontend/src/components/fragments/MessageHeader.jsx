@@ -48,7 +48,9 @@ const MessageHeader = () => {
                 ? `${chatData.firstName} ${chatData.lastName}  `
                 : chatData.email}
             </span>
-            {/* <span className="text-xs">Offline</span> */}
+            <span className="text-xs">
+              {chatData.status === false ? "Offline" : "Online"}
+            </span>
           </div>
         </div>
         <div className="flex-center gap-5">

@@ -149,7 +149,9 @@ const NewDm = () => {
                           <AvatarImage
                             src={contact.image}
                             alt="profile"
-                            className={"object-cover w-full h-full bg-black"}
+                            className={
+                              "object-cover w-full h-full rounded-full bg-black"
+                            }
                             loading="lazy"
                           />
                         ) : (

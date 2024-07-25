@@ -1,30 +1,56 @@
+import { useSocket } from "@/contexts/SocketContext";
+import { selectedUserData } from "@/store/slices/auth-slices";
+import {
+  addMessage,
+  setSelectedChatData,
+  setSelectedChatType,
+} from "@/store/slices/chat-slices";
 import EmojiPicker from "emoji-picker-react";
 import { Paperclip, SendHorizonal, Sticker } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const MessageBar = () => {
-  const emojiRef = useRef();
-
+  const emojiRef = useRef(null);
+  const dispatch = useDispatch();
   const [message, setMessage] = useState("");
+  const chatData = useSelector(setSelectedChatData);
+  const chatType = useSelector(setSelectedChatType);
+  const userData = useSelector(selectedUserData);
+  const socket = useSocket();
   const [isEmojiPicker, setIsEmojiPicker] = useState(false);
 
   const handleAddEmoji = (emoji) => {
     setMessage((msg) => msg + emoji.emoji);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (emojiRef.current && !emojiRef.current.contains(e.target)) {
-        return setIsEmojiPicker(false);
-      }
+  const handleSendMessage = async () => {
+    const messageData = {
+      sender: userData._id,
+      recipient: chatData._id, // Replace with the actual recipient ID
+      messageType: "text",
+      content: message,
+      fileUrl: undefined,
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    if (chatType === "contact") {
+      socket.emit("sendMessage", messageData);
+      socket.on("receiveMessage", (message) => {
+        if (
+          chatType !== undefined &&
+          (chatData._id === message.sender._id ||
+            chatData._id === message.recipient._id)
+        ) {
+          console.log(true);
+          console.log(message);
+          dispatch(addMessage(message));
+        }
+      });
+    }
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [emojiRef]);
-
-  const handleSendMessage = () => {};
+    setMessage("");
+  };
 
   return (
     <div className="h-[10vh] bg-[#1c1d25] flex-center  px-8 mb-6 gap-6">

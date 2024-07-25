@@ -47,7 +47,7 @@ export const signup = async (req, res, next) => {
     });
 
     const user = await newUser.save();
-    res.cookie("jwt", createToken(email, user.id), {
+    res.cookie("jwt", createToken(email, user._id), {
       maxAge: maxAge,
       secure: true,
       sameSite: "None",
@@ -55,7 +55,7 @@ export const signup = async (req, res, next) => {
 
     res.status(201).json({
       user: {
-        id: user.id,
+        _id: user.id,
         email: user.email,
         profileSetup: user.profileSetup,
       },
@@ -91,7 +91,7 @@ export const login = async (req, res, next) => {
     });
 
     const {
-      _id: id,
+      _id,
       email: emails,
       profileSetup,
       firstName,
@@ -104,7 +104,7 @@ export const login = async (req, res, next) => {
       success: true,
       message: "Login Succesfully",
       user: {
-        id,
+        _id,
         email: emails,
         profileSetup,
         firstName,
@@ -128,7 +128,7 @@ export const getUserData = async (req, res, next) => {
       throw new ResponseError(404, "User is not found.");
     }
 
-    user.id = userId;
+    user._id = userId;
 
     res.status(200).json({
       succes: true,

@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import authRoutes from "./src/routes/auth-routes.js";
 import errorMiddleware from "./src/middlewares/error-middleware.js";
 import contactsRoutes from "./src/routes/contact-routes.js";
+import setupSocket from "./socket.js";
 
 dotenv.config();
 
@@ -40,8 +41,10 @@ const connectDB = async () => {
   }
 };
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   connectDB();
 
   console.log("Server is running in port " + port);
 });
+
+setupSocket(server);

@@ -39,7 +39,7 @@ const Auth = () => {
         throw new Error(data.errors);
       }
 
-      if (data.user.id) {
+      if (data.user._id) {
         dispatch(setUserData(data.user));
         data.user.profileSetup ? navigate("/chat") : navigate("/profile");
       }

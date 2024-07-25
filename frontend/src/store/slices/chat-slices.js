@@ -19,6 +19,18 @@ const chatSlice = createSlice({
     setChatMessages: (state, action) => {
       state.chatMessage = action.payload;
     },
+    addMessage: (state, action) => {
+      const { chatType } = state;
+      const message = action.payload;
+
+      const newMessage = {
+        ...message,
+        recipient:
+          chatType === "channel" ? message.recipient : message.recipient._id,
+      };
+
+      state.chatMessage.push(newMessage);
+    },
     closeChat: (state) => {
       state.chatType = undefined;
       state.chatMessage = undefined;
@@ -27,8 +39,13 @@ const chatSlice = createSlice({
   },
 });
 
-export const { setChatType, closeChat, setChatData, setChatMessages } =
-  chatSlice.actions;
+export const {
+  setChatType,
+  closeChat,
+  setChatData,
+  setChatMessages,
+  addMessage,
+} = chatSlice.actions;
 export default chatSlice.reducer;
 
 export const setSelectedChatData = (state) => state.chat.chatData;
