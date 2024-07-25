@@ -8,12 +8,14 @@ import { Tooltip } from "@radix-ui/react-tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { EditIcon } from "lucide-react";
 import { CirclePower } from "lucide-react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const ProfileInfo = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userData = useSelector(selectedUserData);
 
   const split = () => {
@@ -32,11 +34,12 @@ const ProfileInfo = () => {
     try {
       const res = await fetch(HOST + "/api/auth/logout", {
         method: "POST",
+        credentials: "include",
       });
 
       if (res.ok) {
         navigate("/auth");
-        setUserData(null);
+        dispatch(setUserData(null));
       }
     } catch (error) {
       toast.error(error.message);
@@ -46,13 +49,13 @@ const ProfileInfo = () => {
   return (
     <div className="absolute bottom-0 h-16 flex items-center justify-between px-10 w-full bg-[#2a2b33]">
       <div className="flex gap-3 items-center justify-center">
-        <div className="w-12 h-12 rounded-full">
+        <div className="w-12 h-12 rounded-full relative">
           <Avatar>
             {userData.image ? (
               <AvatarImage
                 src={userData.image}
                 alt="profile"
-                className={"object-cover w-full h-full bg-black"}
+                className={"object-cover w-full h-full rounded-full  bg-black"}
                 loading="lazy"
               />
             ) : (

@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "../ui/logo";
 import Title from "../elements/Title";
 import ProfileInfo from "../fragments/ProfileInfo";
+import NewDm from "../fragments/NewDm";
 
 const ContactLayout = () => {
   return (
@@ -12,6 +13,7 @@ const ContactLayout = () => {
       <div className="my-5">
         <div className="flex-between pr-10">
           <Title text="Direct Messages" />
+          <NewDm />
         </div>
       </div>
       <div className="my-5">

@@ -38,7 +38,6 @@ const Auth = () => {
       if (!res.ok) {
         throw new Error(data.errors);
       }
-      console.log(data);
 
       if (data.user.id) {
         dispatch(setUserData(data.user));
@@ -69,8 +68,7 @@ const Auth = () => {
         throw new Error(data.errors);
       }
 
-      console.log(data);
-      // navigate("/profile");
+      navigate("/profile");
     } catch (error) {
       toast.error(error.message);
     } finally {

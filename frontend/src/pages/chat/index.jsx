@@ -22,7 +22,7 @@ const Chat = () => {
     <main className="flex h-screen text-white overflow-hidden">
       <ContactLayout />
       {/* <EmptyChatLayout /> */}
-      <ChatLayout />
+      {/* <ChatLayout /> */}
     </main>
   );
 };

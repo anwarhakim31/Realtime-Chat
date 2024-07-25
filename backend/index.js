@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import authRoutes from "./src/routes/auth-routes.js";
 import errorMiddleware from "./src/middlewares/error-middleware.js";
+import contactsRoutes from "./src/routes/contact-routes.js";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/contacts", contactsRoutes);
 app.use(errorMiddleware);
 
 const connectDB = async () => {

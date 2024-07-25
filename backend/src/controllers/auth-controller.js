@@ -16,14 +16,15 @@ import resizeImage from "../util/resize-image.js";
 
 dotenv.config();
 
-const maxAge = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
+const maxAge = 24 * 60 * 60 * 1000;
 
 const createToken = (email, userId) => {
   const secret = process.env.JWT_KEY;
   if (!secret) {
     throw new Error("JWT_KEY is not defined");
   }
-  return jwt.sign({ email, userId }, secret, { expiresIn: maxAge });
+  const jwtExpiration = 24 * 60 * 60;
+  return jwt.sign({ email, userId }, secret, { expiresIn: jwtExpiration });
 };
 
 export const signup = async (req, res, next) => {
@@ -47,7 +48,7 @@ export const signup = async (req, res, next) => {
 
     const user = await newUser.save();
     res.cookie("jwt", createToken(email, user.id), {
-      maxAge,
+      maxAge: maxAge,
       secure: true,
       sameSite: "None",
     });
@@ -77,7 +78,7 @@ export const login = async (req, res, next) => {
       throw new ResponseError(404, "Email or Password is wrong");
     }
 
-    const isMatch = await compare(password, user.password);
+    const isMatch = compare(password, user.password);
 
     if (!isMatch) {
       throw new ResponseError(400, "Email or Password is wrong");
@@ -232,7 +233,11 @@ export const removeProfileImage = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0, secure: true, sameSite: "None" });
+    res.cookie("jwt", "", {
+      maxAge: 1,
+      secure: true,
+      sameSite: "None",
+    });
 
     res.status(200).json({ success: true, message: "Succsesfully logout." });
   } catch (error) {
