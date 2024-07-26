@@ -1,6 +1,10 @@
 import { useSocket } from "@/contexts/SocketContext";
 import { selectedUserData } from "@/store/slices/auth-slices";
-import { selectedChatData, selectedChatType } from "@/store/slices/chat-slices";
+import {
+  addMessage,
+  selectedChatData,
+  selectedChatType,
+} from "@/store/slices/chat-slices";
 import EmojiPicker from "emoji-picker-react";
 import { Paperclip, SendHorizonal, Sticker } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -15,6 +19,7 @@ const MessageBar = () => {
   const userData = useSelector(selectedUserData);
   const socket = useSocket();
   const [isEmojiPicker, setIsEmojiPicker] = useState(false);
+  const dispatch = useDispatch();
 
   const handleAddEmoji = (emoji) => {
     setMessage((msg) => msg + emoji.emoji);
@@ -33,27 +38,6 @@ const MessageBar = () => {
 
     setMessage("");
   };
-
-  // useEffect(() => {
-  //   if (socket) {
-  //     const receiveMessageHandler = (message) => {
-  //       if (
-  //         chatType !== undefined &&
-  //         (chatData._id === message.sender._id ||
-  //           chatData._id === message.recipient._id)
-  //       ) {
-  //         console.log(message);
-  //         dispatch(addMessage(message));
-  //       }
-  //     };
-
-  //     socket.on("receiveMessage", receiveMessageHandler);
-
-  //     return () => {
-  //       socket.off("receiveMessage", receiveMessageHandler);
-  //     };
-  //   }
-  // }, [socket, chatData, chatType, dispatch]);
 
   return (
     <div className="h-[10vh] bg-[#1c1d25] flex-center  px-8 mb-6 gap-6">

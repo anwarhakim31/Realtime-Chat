@@ -27,6 +27,7 @@ const chatSlice = createSlice({
         ...message,
         recipient:
           chatType === "channel" ? message.recipient : message.recipient._id,
+        sender: chatType === "channel" ? message.sender : message.sender._id,
       };
       // console.log(newMessage);
       state.chatMessage.push(newMessage);

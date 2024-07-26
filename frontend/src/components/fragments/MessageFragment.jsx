@@ -21,8 +21,6 @@ const MessageFragment = () => {
     }
   }, [chatMessages]);
 
-  console.log(chatMessages);
-
   const renderMessages = () => {
     let lastDate = null;
 
@@ -47,7 +45,7 @@ const MessageFragment = () => {
   const renderDmMessages = (message) => (
     <div
       className={`${
-        message.sender._id === chatData._id ? "text-left" : "text-right"
+        message.sender === chatData._id ? "text-left" : "text-right"
       }`}
     >
       {message.messageType === "text" && (
