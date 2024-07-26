@@ -47,6 +47,18 @@ const MessageBar = () => {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutSide = (e) => {
+      if (emojiRef.current && !emojiRef.current.contains(e.target)) {
+        setIsEmojiPicker(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutSide);
+
+    return () => document.removeEventListener("mousedown", handleClickOutSide);
+  }, [isEmojiPicker]);
+
   return (
     <div className="h-[10vh] bg-[#1c1d25] flex-center  px-8 mb-6 gap-6">
       <div className="flex-1 flex bg-[#2a2b33] rounded-md items-center gap-6 pr-5">

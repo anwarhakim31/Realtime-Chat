@@ -17,3 +17,5 @@ const userSlice = createSlice({
 
 export const { setOnlineStatus, setOfflineStatus } = userSlice.actions;
 export default userSlice.reducer;
+
+export const selectedOnlineUser = (state) => state.users.onlineUsers;

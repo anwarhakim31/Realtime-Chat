@@ -39,7 +39,7 @@ const SocketProvider = ({ children }) => {
       });
 
       socket.current.on("userStatus", ({ userId, status }) => {
-        console.log("User status update:", { userId, status });
+        // console.log("User status update:", { userId, status });
         if (status === "online") {
           dispatch(setOnlineStatus(userId));
         } else {

@@ -3,13 +3,16 @@ import {
   selectedChatData,
   selectedChatMessage,
   selectedChatType,
+  setChatMessages,
 } from "@/store/slices/chat-slices";
+import { HOST } from "@/utils/constant";
 import moment from "moment";
-import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const MessageFragment = () => {
   const scrollRef = useRef();
+  const dispatch = useDispatch();
   const chatType = useSelector(selectedChatType);
   const chatData = useSelector(selectedChatData);
   const userData = useSelector(selectedUserData);
@@ -20,6 +23,35 @@ const MessageFragment = () => {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [chatMessages]);
+
+  useEffect(() => {
+    const getMessages = async () => {
+      try {
+        const res = await fetch(HOST + "/api/messages/get-messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: chatData._id }),
+          credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if (data.messages) {
+          dispatch(setChatMessages(data.messages));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (chatData._id) {
+      if (chatType === "contact") {
+        getMessages();
+      }
+    }
+  }, [chatType, chatData]);
 
   const renderMessages = () => {
     let lastDate = null;

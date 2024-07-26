@@ -4,10 +4,11 @@ import { X } from "lucide-react";
 import { useEffect } from "react";
 import { useSocket } from "@/contexts/SocketContext";
 import { setOfflineStatus, setOnlineStatus } from "@/store/slices/users-slices";
-import { closeChat } from "@/store/slices/chat-slices";
+import { closeChat, setChatData } from "@/store/slices/chat-slices";
 import { AvatarImage } from "../ui/avatar";
 import { splitName } from "./NewDm";
 import { getColor } from "@/lib/utils";
+import { setUserData } from "@/store/slices/auth-slices";
 
 const MessageHeader = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const MessageHeader = () => {
                 <AvatarImage
                   src={chatData.image}
                   alt="profile"
-                  className="object-cover w-full rounded-full h-full bg-black"
+                  className="object-cover w-full rounded-fullh-full bg-black"
                   loading="lazy"
                 />
               ) : (
@@ -55,7 +56,10 @@ const MessageHeader = () => {
         </div>
         <div className="flex-center gap-5">
           <button
-            onClick={() => dispatch(closeChat())}
+            onClick={() => {
+              dispatch(setChatData(undefined));
+              dispatch(closeChat());
+            }}
             className="text-neutral-500 rounded-sm p-1 focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
           >
             <X width={25} height={25} />
