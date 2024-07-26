@@ -21,12 +21,12 @@ const MessageHeader = () => {
       <div className="flex gap-5 items-center w-full justify-between">
         <div className="flex gap-3 items-center justify-center">
           <div className="w-12 h-12 rounded-full relative">
-            <Avatar className="w-12 h-12 rounded-full">
+            <Avatar className="w-12 h-12 ">
               {chatData.image ? (
                 <AvatarImage
                   src={chatData.image}
                   alt="profile"
-                  className="object-cover w-full h-full bg-black"
+                  className="object-cover w-full rounded-full h-full bg-black"
                   loading="lazy"
                 />
               ) : (

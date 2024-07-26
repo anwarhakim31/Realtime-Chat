@@ -46,7 +46,7 @@ const MessageFragment = () => {
     <div
       className={`${
         message.sender === chatData._id ? "text-left" : "text-right"
-      }`}
+      } mt-1`}
     >
       {message.messageType === "text" && (
         <div

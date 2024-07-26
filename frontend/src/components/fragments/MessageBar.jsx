@@ -26,17 +26,25 @@ const MessageBar = () => {
   };
 
   const handleSendMessage = async () => {
-    if (chatType === "contact") {
-      socket.emit("sendMessage", {
-        sender: userData._id,
-        recipient: chatData._id,
-        messageType: "text",
-        content: message,
-        fileUrl: undefined,
-      });
+    if (message.length !== 0) {
+      if (chatType === "contact") {
+        socket.emit("sendMessage", {
+          sender: userData._id,
+          recipient: chatData._id,
+          messageType: "text",
+          content: message,
+          fileUrl: undefined,
+        });
+      }
     }
 
     setMessage("");
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
   };
 
   return (
@@ -48,6 +56,7 @@ const MessageBar = () => {
           placeholder="Enter Message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <button className="text-neutral-500 rounded-sm p-1 focus:border-none focus:outline-none focus:text-white duration-300 transition-all">
           <Paperclip width={25} height={25} />
