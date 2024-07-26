@@ -22,7 +22,6 @@ const SocketProvider = ({ children }) => {
   const userData = useSelector(selectedUserData);
   const chatData = useSelector(selectedChatData);
   const chatType = useSelector(selectedChatType);
-
   const dispatch = useDispatch();
   const cookie = Cookie.get("jwt");
 
@@ -55,7 +54,7 @@ const SocketProvider = ({ children }) => {
         console.log("Socket disconnected");
       };
     }
-  }, [cookie]);
+  }, [cookie, userData]);
 
   useEffect(() => {
     if (chatData) {

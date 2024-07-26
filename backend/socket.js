@@ -13,7 +13,7 @@ const setupSocket = (server) => {
   const userSocketMap = new Map();
 
   const disconnect = (socket) => {
-    console.log("disconnect", socket.id);
+    // console.log("disconnect", socket.id);
 
     for (const [userId, socketId] of userSocketMap.entries()) {
       if (socketId === socket.id) {
@@ -56,7 +56,7 @@ const setupSocket = (server) => {
 
     if (userId) {
       userSocketMap.set(userId, socket.id);
-      console.log(`User ${userId} connected with socket ${socket.id}`);
+      // console.log(`User ${userId} connected with socket ${socket.id}`);
 
       // Kirim status pengguna baru
       io.emit("userStatus", { userId, status: "online" });

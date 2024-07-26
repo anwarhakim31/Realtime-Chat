@@ -23,8 +23,6 @@ app.use(
   })
 );
 
-// app.use("uploads/profile", express.static("uploads/profiles"));
-
 app.use(cookieParser());
 app.use(express.json());
 
@@ -35,6 +33,7 @@ app.use(errorMiddleware);
 const connectDB = async () => {
   try {
     await mongoose.connect(databaseURL);
+
     console.log("Success connect to DB");
   } catch (error) {
     console.log(error);

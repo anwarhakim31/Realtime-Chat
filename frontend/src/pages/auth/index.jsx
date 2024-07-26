@@ -68,6 +68,7 @@ const Auth = () => {
         throw new Error(data.errors);
       } else {
         navigate("/profile");
+        window.location.reload();
       }
     } catch (error) {
       toast.error(error.message);
@@ -107,11 +108,11 @@ const Auth = () => {
           </div>
           <div className="flex items-center justify-center w-full">
             <Tabs
-              className="w-3/4"
+              className="w-3/4 "
               defaultValue="Login"
               onValueChange={setActiveTab}
             >
-              <TabsList className="grid grid-cols-2 bg-transparent rounded-none">
+              <TabsList className="grid grid-cols-2 bg-transparent rounded-none ">
                 <TabsTrigger
                   value="Login"
                   disabled={loading}
@@ -127,8 +128,8 @@ const Auth = () => {
                   Signup
                 </TabsTrigger>
               </TabsList>
-              <TabsContent className="mt-4" value="Login">
-                <div className="flex flex-col gap-5">
+              <TabsContent className="mt-4 select-none" value="Login">
+                <div className="flex flex-col gap-5 ">
                   <Input
                     type="email"
                     placeholder={"Email"}

@@ -188,8 +188,6 @@ export const addProfileImage = async (req, res, next) => {
 
     const data = await s3.send(new PutObjectCommand(uploadParams));
 
-    fs.unlinkSync(filePath);
-
     const fileName = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${uploadParams.Key}`;
 
     const userUpdate = await User.findByIdAndUpdate(
@@ -218,7 +216,7 @@ export const removeProfileImage = async (req, res, next) => {
     if (!user) {
       throw new ResponseError(404, "User is not found");
     }
-
+    console.log(user);
     user.image = null;
 
     await user.save();
