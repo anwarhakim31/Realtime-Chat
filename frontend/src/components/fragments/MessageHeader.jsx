@@ -16,8 +16,6 @@ const MessageHeader = () => {
 
   const onlineUsers = useSelector((state) => state.users.onlineUsers);
 
-  console.log(onlineUsers);
-
   return (
     <div className="h-[10vh] border-b-2 border-[#2f303b] flex items-between px-20">
       <div className="flex gap-5 items-center w-full justify-between">

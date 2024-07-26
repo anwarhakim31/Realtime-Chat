@@ -2,7 +2,7 @@ import ChatLayout from "@/components/layouts/ChatLayout";
 import ContactLayout from "@/components/layouts/ContactLayout";
 import EmptyChatLayout from "@/components/layouts/EmptyChatLayout";
 import { selectedUserData } from "@/store/slices/auth-slices";
-import { setSelectedChatType } from "@/store/slices/chat-slices";
+import { selectedChatType } from "@/store/slices/chat-slices";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 const Chat = () => {
   const userData = useSelector(selectedUserData);
   const navigate = useNavigate();
-  const chatType = useSelector(setSelectedChatType);
+  const chatType = useSelector(selectedChatType);
 
   useEffect(() => {
     if (!userData.profileSetup) {

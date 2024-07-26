@@ -1,35 +1,27 @@
-import { selectedUserData } from "@/store/slices/auth-slices";
-import {
-  addMessage,
-  setChatData,
-  setSelectedChatData,
-  setSelectedChatType,
-} from "@/store/slices/chat-slices";
-import { HOST } from "@/utils/constant";
-import { useRef } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
-import { createContext } from "react";
-import { useSelector } from "react-redux";
+import { createContext, useContext, useRef, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { io } from "socket.io-client";
-import { useDispatch } from "react-redux";
 import Cookie from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
+import {
+  selectedChatData,
+  addMessage,
+  selectedChatType,
+} from "@/store/slices/chat-slices";
 import { setOfflineStatus, setOnlineStatus } from "@/store/slices/users-slices";
+import { HOST } from "@/utils/constant";
 
 const SocketContext = createContext(null);
 
-export const useSocket = () => {
-  return useContext(SocketContext);
-};
+export const useSocket = () => useContext(SocketContext);
 
 const SocketProvider = ({ children }) => {
   const socket = useRef();
-  const userData = useSelector(selectedUserData);
-  const chatData = useSelector(setSelectedChatData);
-  const chatType = useSelector(setSelectedChatType);
   const dispatch = useDispatch();
   const cookie = Cookie.get("jwt");
+
+  const chatData = useSelector(selectedChatData);
+  const chatType = useSelector(selectedChatType);
 
   useEffect(() => {
     if (cookie) {
@@ -45,26 +37,35 @@ const SocketProvider = ({ children }) => {
       });
 
       socket.current.on("userStatus", ({ userId, status }) => {
-        console.log(status);
-        console.log(userId);
-
+        console.log("User status update:", { userId, status });
         if (status === "online") {
           dispatch(setOnlineStatus(userId));
         } else {
           dispatch(setOfflineStatus(userId));
         }
       });
-    }
 
-    return () => {
-      if (socket.current) {
-        socket.current.off("receiveMessage");
-        socket.current.off("userStatus");
-        socket.current.disconnect();
-        console.log("Socket disconnected");
-      }
-    };
-  }, [cookie]);
+      socket.current.on("receiveMessage", (message) => {
+        // console.log("Received message:", message);
+        if (
+          chatType !== undefined &&
+          (chatData._id === message.sender._id ||
+            chatData._id === message.recipient._id)
+        ) {
+          dispatch(addMessage(message));
+        }
+      });
+
+      return () => {
+        if (socket.current) {
+          socket.current.off("receiveMessage");
+          socket.current.off("userStatus");
+          socket.current.disconnect();
+          console.log("Socket disconnected");
+        }
+      };
+    }
+  }, [cookie, chatData, dispatch]);
 
   return (
     <SocketContext.Provider value={socket.current}>

@@ -13,19 +13,19 @@ const setupSocket = (server) => {
   const userSocketMap = new Map();
 
   const disconnect = (socket) => {
-    console.log("disconnect", socket.id);
+    // console.log("disconnect", socket.id);
 
     for (const [userId, socketId] of userSocketMap.entries()) {
       if (socketId === socket.id) {
         io.emit("userStatus", { userId, status: "offline" });
-        // userSocketMap.forEach((socketId, existingUserId) => {
-        //   if (existingUserId !== userId) {
-        //     io.to(socket.id).emit("userStatus", {
-        //       userId: existingUserId,
-        //       status: "offline  ",
-        //     });
-        //   }
-        // });
+        userSocketMap.forEach((socketId, existingUserId) => {
+          if (existingUserId !== userId) {
+            io.to(socket.id).emit("userStatus", {
+              userId: existingUserId,
+              status: "offline  ",
+            });
+          }
+        });
         userSocketMap.delete(userId);
         break;
       }
@@ -56,20 +56,20 @@ const setupSocket = (server) => {
 
     if (userId) {
       userSocketMap.set(userId, socket.id);
-      console.log(`User ${userId} connected with socket ${socket.id}`);
+      // console.log(`User ${userId} connected with socket ${socket.id}`);
 
       // Kirim status pengguna baru
       io.emit("userStatus", { userId, status: "online" });
 
       // Kirim status semua pengguna yang sudah ada ke pengguna baru
-      // userSocketMap.forEach((socketId, existingUserId) => {
-      //   if (existingUserId !== userId) {
-      //     io.to(socket.id).emit("userStatus", {
-      //       userId: existingUserId,
-      //       status: "online",
-      //     });
-      //   }
-      // });
+      userSocketMap.forEach((socketId, existingUserId) => {
+        if (existingUserId !== userId) {
+          io.to(socket.id).emit("userStatus", {
+            userId: existingUserId,
+            status: "online",
+          });
+        }
+      });
 
       socket.on("sendMessage", sendMessage);
       socket.on("disconnect", () => disconnect(socket));

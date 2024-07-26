@@ -28,7 +28,7 @@ const chatSlice = createSlice({
         recipient:
           chatType === "channel" ? message.recipient : message.recipient._id,
       };
-
+      // console.log(newMessage);
       state.chatMessage.push(newMessage);
     },
     closeChat: (state) => {
@@ -48,6 +48,6 @@ export const {
 } = chatSlice.actions;
 export default chatSlice.reducer;
 
-export const setSelectedChatData = (state) => state.chat.chatData;
-export const setSelectedChatType = (state) => state.chat.chatType;
-export const setSelectedChatMessage = (state) => state.chat.chatMessage;
+export const selectedChatData = (state) => state.chat.chatData;
+export const selectedChatType = (state) => state.chat.chatType;
+export const selectedChatMessage = (state) => state.chat.chatMessage;

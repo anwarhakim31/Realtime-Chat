@@ -66,9 +66,9 @@ const Auth = () => {
 
       if (!res.ok) {
         throw new Error(data.errors);
+      } else {
+        navigate("/profile");
       }
-
-      navigate("/profile");
     } catch (error) {
       toast.error(error.message);
     } finally {

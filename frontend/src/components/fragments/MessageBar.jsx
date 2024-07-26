@@ -1,22 +1,17 @@
 import { useSocket } from "@/contexts/SocketContext";
 import { selectedUserData } from "@/store/slices/auth-slices";
-import {
-  addMessage,
-  setSelectedChatData,
-  setSelectedChatType,
-} from "@/store/slices/chat-slices";
+import { selectedChatData, selectedChatType } from "@/store/slices/chat-slices";
 import EmojiPicker from "emoji-picker-react";
 import { Paperclip, SendHorizonal, Sticker } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 const MessageBar = () => {
   const emojiRef = useRef(null);
-  const dispatch = useDispatch();
   const [message, setMessage] = useState("");
-  const chatData = useSelector(setSelectedChatData);
-  const chatType = useSelector(setSelectedChatType);
+  const chatData = useSelector(selectedChatData);
+  const chatType = useSelector(selectedChatType);
   const userData = useSelector(selectedUserData);
   const socket = useSocket();
   const [isEmojiPicker, setIsEmojiPicker] = useState(false);
@@ -26,31 +21,39 @@ const MessageBar = () => {
   };
 
   const handleSendMessage = async () => {
-    const messageData = {
-      sender: userData._id,
-      recipient: chatData._id, // Replace with the actual recipient ID
-      messageType: "text",
-      content: message,
-      fileUrl: undefined,
-    };
-
     if (chatType === "contact") {
-      socket.emit("sendMessage", messageData);
-      socket.on("receiveMessage", (message) => {
-        if (
-          chatType !== undefined &&
-          (chatData._id === message.sender._id ||
-            chatData._id === message.recipient._id)
-        ) {
-          console.log(true);
-          console.log(message);
-          dispatch(addMessage(message));
-        }
+      socket.emit("sendMessage", {
+        sender: userData._id,
+        recipient: chatData._id,
+        messageType: "text",
+        content: message,
+        fileUrl: undefined,
       });
     }
 
     setMessage("");
   };
+
+  // useEffect(() => {
+  //   if (socket) {
+  //     const receiveMessageHandler = (message) => {
+  //       if (
+  //         chatType !== undefined &&
+  //         (chatData._id === message.sender._id ||
+  //           chatData._id === message.recipient._id)
+  //       ) {
+  //         console.log(message);
+  //         dispatch(addMessage(message));
+  //       }
+  //     };
+
+  //     socket.on("receiveMessage", receiveMessageHandler);
+
+  //     return () => {
+  //       socket.off("receiveMessage", receiveMessageHandler);
+  //     };
+  //   }
+  // }, [socket, chatData, chatType, dispatch]);
 
   return (
     <div className="h-[10vh] bg-[#1c1d25] flex-center  px-8 mb-6 gap-6">

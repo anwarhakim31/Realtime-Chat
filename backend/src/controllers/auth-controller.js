@@ -78,7 +78,7 @@ export const login = async (req, res, next) => {
       throw new ResponseError(404, "Email or Password is wrong");
     }
 
-    const isMatch = compare(password, user.password);
+    const isMatch = await compare(password, user.password);
 
     if (!isMatch) {
       throw new ResponseError(400, "Email or Password is wrong");
