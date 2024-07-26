@@ -3,8 +3,10 @@ import { selectedUserData } from "@/store/slices/auth-slices";
 import {
   addMessage,
   selectedChatData,
+  selectedChatMessage,
   selectedChatType,
 } from "@/store/slices/chat-slices";
+import { HOST } from "@/utils/constant";
 import EmojiPicker from "emoji-picker-react";
 import { Paperclip, SendHorizonal, Sticker } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -13,10 +15,12 @@ import { useSelector } from "react-redux";
 
 const MessageBar = () => {
   const emojiRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [message, setMessage] = useState("");
   const chatData = useSelector(selectedChatData);
   const chatType = useSelector(selectedChatType);
   const userData = useSelector(selectedUserData);
+  const chatMassage = useSelector(selectedChatMessage);
   const socket = useSocket();
   const [isEmojiPicker, setIsEmojiPicker] = useState(false);
   const dispatch = useDispatch();
@@ -24,6 +28,8 @@ const MessageBar = () => {
   const handleAddEmoji = (emoji) => {
     setMessage((msg) => msg + emoji.emoji);
   };
+
+  console.log(chatMassage);
 
   const handleSendMessage = async () => {
     if (message.length !== 0) {
@@ -41,9 +47,49 @@ const MessageBar = () => {
     setMessage("");
   };
 
+  const handleAttachmentClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSendMessage();
+    }
+  };
+
+  const handleAttachmentChange = async (e) => {
+    const file = e.target.files[0];
+
+    try {
+      if (file) {
+        const formData = new FormData();
+
+        formData.append("file", file);
+
+        const res = await fetch(HOST + "/api/messages/upload-file", {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          if (chatType === "contact") {
+            socket.emit("sendMessage", {
+              sender: userData._id,
+              recipient: chatData._id,
+              messageType: "file",
+              content: undefined,
+              fileUrl: data.filePath,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -70,9 +116,19 @@ const MessageBar = () => {
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <button className="text-neutral-500 rounded-sm p-1 focus:border-none focus:outline-none focus:text-white duration-300 transition-all">
+        <button
+          onClick={handleAttachmentClick}
+          className="text-neutral-500 rounded-sm p-1 focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
+        >
           <Paperclip width={25} height={25} />
         </button>
+        <input
+          type="file"
+          id="file"
+          className="hidden"
+          ref={fileInputRef}
+          onChange={handleAttachmentChange}
+        />
         <div className="relative">
           <button
             onClick={() => setIsEmojiPicker(true)}
@@ -81,6 +137,7 @@ const MessageBar = () => {
           >
             <Sticker width={28} height={28} />
           </button>
+
           <div className="absolute bottom-16 right-0" ref={emojiRef}>
             <EmojiPicker
               theme="dark"

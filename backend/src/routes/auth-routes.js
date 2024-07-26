@@ -1,5 +1,5 @@
 import express from "express";
-import multer from "multer";
+
 import { verifyToken } from "../middlewares/auth-middleware.js";
 import {
   signup,
@@ -10,17 +10,7 @@ import {
   removeProfileImage,
   logout,
 } from "../controllers/auth-controller.js";
-
-const storage = multer.diskStorage({
-  // destination: function (req, file, cb) {
-  //   cb(null, "uploads/profiles"); // Directory to save uploaded files
-  // },
-  filename: function (req, file, cb) {
-    cb(null, Date.now().toString() + "-" + file.originalname); // File name
-  },
-});
-
-const upload = multer({ storage: storage });
+import { upload } from "../util/multer.js";
 
 const authRoutes = express.Router();
 

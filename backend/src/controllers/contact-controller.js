@@ -96,8 +96,6 @@ export const getContactsForDMlist = async (req, res, next) => {
       },
     ]);
 
-    console.log("Aggregated Contacts:", contacts);
-
     res
       .status(200)
       .json({ success: true, message: "Succesfully get list.", contacts });
