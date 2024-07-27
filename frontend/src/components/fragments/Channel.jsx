@@ -14,36 +14,18 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { Input } from "../ui/input";
-import Lottie2 from "react-lottie";
-import { animationDefaultOption, getColor } from "@/lib/utils";
 import { useEffect } from "react";
 import { HOST } from "@/utils/constant";
 import { toast } from "sonner";
-import { ScrollArea } from "../ui/scroll-area";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import { useDispatch } from "react-redux";
-import { setChatData, setChatType } from "@/store/slices/chat-slices";
 import { Button } from "../ui/button";
 import MultipleSelector from "../ui/multipleselect";
-
-export const splitName = (firstName, lastName) => {
-  const result = [];
-
-  const first = firstName.split("").shift();
-  const last = lastName.split("").shift();
-
-  result.push(first);
-  result.push(last);
-
-  return result.join("");
-};
+import { addChannel } from "@/store/slices/chat-slices";
 
 const Channel = () => {
   const dispatch = useDispatch();
 
   const [newChannelModal, setNewChannelModal] = useState(false);
-  const [search, setSearch] = useState("");
-  const [searchedContacts, setSearchedContacts] = useState([]);
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [allContact, setAllContact] = useState([]);
   const [channelName, setChannelName] = useState("");
@@ -72,7 +54,36 @@ const Channel = () => {
     getData();
   }, []);
 
-  const handleCreateChannel = async () => {};
+  const handleCreateChannel = async () => {
+    try {
+      if (channelName.length > 0 && selectedContacts.length > 0) {
+        const res = await fetch(HOST + "/api/channel/create-channel", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: channelName,
+            members: selectedContacts.map((contact) => contact.value),
+          }),
+          credentials: "include",
+        });
+        const data = await res.json();
+        console.log(data);
+
+        if (!res.ok) {
+          throw new Error(data.errors);
+        } else {
+          setChannelName("");
+          setSelectedContacts([]);
+          setNewChannelModal(false);
+          dispatch(addChannel(data.channel));
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <>

@@ -45,6 +45,14 @@ const MessageBar = () => {
           content: message,
           fileUrl: undefined,
         });
+      } else if (chatType === "channel") {
+        socket.emit("sendMessage-channel", {
+          sender: userData._id,
+          content: message,
+          messageType: "text",
+          fileUrl: undefined,
+          channelId: chatData._id,
+        });
       }
     }
 
@@ -102,6 +110,14 @@ const MessageBar = () => {
               messageType: "file",
               content: undefined,
               fileUrl: res.data.filePath,
+            });
+          } else if (chatType === "channel") {
+            socket.emit("sendMessage-channel", {
+              sender: userData._id,
+              content: message,
+              messageType: "text",
+              fileUrl: undefined,
+              channelId: chatData._id,
             });
           }
         }

@@ -9,12 +9,19 @@ const initialState = {
   isDownloading: false,
   fileUploadingProgress: 0,
   fileDownloadingProgress: 0,
+  channels: [],
 };
 
 const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    setChannel: (state, action) => {
+      state.channels = action.payload;
+    },
+    addChannel: (state, action) => {
+      state.channels.unshift(action.payload);
+    },
     setIsUploading: (state, action) => {
       state.isUploading = action.payload;
     },
@@ -71,6 +78,8 @@ export const {
   setFileUploadingProgress,
   setIsDownloading,
   setIsUploading,
+  addChannel,
+  setChannel,
 } = chatSlice.actions;
 export default chatSlice.reducer;
 
@@ -85,3 +94,4 @@ export const selectedFileDownloadingProgress = (state) =>
   state.chat.fileDownloadingProgress;
 export const selectedFileUploadingProgress = (state) =>
   state.chat.fileUploadingProgress;
+export const selectedChannels = (state) => state.chat.channels;

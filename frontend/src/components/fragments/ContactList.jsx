@@ -18,6 +18,8 @@ const ContactList = ({ contacts, isChannel = false }) => {
   const chatType = useSelector(selectedChatType);
   const onlineUser = useSelector(selectedOnlineUser);
 
+  console.log(contacts);
+
   const handleClick = (contact) => {
     if (isChannel) {
       dispatch(setChatType("channel"));
@@ -42,7 +44,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
           }`}
           onClick={() => handleClick(contact)}
         >
-          <div className="flex items-start justify-start gap-4 text-neutral-300">
+          <div className="flex items-center justify-start gap-4 text-neutral-300">
             {!isChannel && (
               <>
                 <div className="w-10 h-10 rounded-full relative">
@@ -67,25 +69,30 @@ const ContactList = ({ contacts, isChannel = false }) => {
                     )}
                   </Avatar>
                 </div>
-                {isChannel ? (
-                  <span>{contact.name}</span>
-                ) : (
-                  <div className="flex flex-col">
-                    <span className="font-medium">
-                      {chatType === "contact" && contact.firstName
-                        ? `${contact.firstName} ${contact.lastName}`
-                        : contact.email}
-                    </span>
-                    <span className="text-xs">
-                      {onlineUser[contact._id] ? (
-                        <span className="tracking-wide">Online</span>
-                      ) : (
-                        <span className=" tracking-wide">Offline</span>
-                      )}
-                    </span>
-                  </div>
-                )}
               </>
+            )}
+            {isChannel && (
+              <div className="bg-[#ffffff22] h-10 w-10 flex items-center justify-center rounded-full">
+                #
+              </div>
+            )}
+            {isChannel ? (
+              <span className="">{contact.name}</span>
+            ) : (
+              <div className="flex flex-col">
+                <span className="font-medium">
+                  {chatType === "contact" && contact.firstName
+                    ? `${contact.firstName} ${contact.lastName}`
+                    : contact.email}
+                </span>
+                <span className="text-xs">
+                  {onlineUser[contact._id] ? (
+                    <span className="tracking-wide">Online</span>
+                  ) : (
+                    <span className=" tracking-wide">Offline</span>
+                  )}
+                </span>
+              </div>
             )}
           </div>
         </div>

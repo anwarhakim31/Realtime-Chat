@@ -22,41 +22,51 @@ const MessageHeader = () => {
       <div className="flex gap-5 items-center w-full justify-between">
         <div className="flex gap-3 items-center justify-center">
           <div className="w-12 h-12 rounded-full relative">
-            <Avatar className="w-12 h-12 ">
-              {chatData.image ? (
-                <AvatarImage
-                  src={chatData.image}
-                  alt="profile"
-                  className="object-cover w-full rounded-full h-full bg-black"
-                  loading="lazy"
-                />
-              ) : (
-                <div
-                  className={`uppercase h-12 w-12 text-xs border flex-center rounded-full ${getColor(
-                    chatData.color
-                  )}`}
-                >
-                  {chatData.firstName && chatData.lastName
-                    ? splitName(chatData.firstName, chatData.lastName)
-                    : chatData.email.charAt(0)}
-                </div>
-              )}
-            </Avatar>
+            {chatType === "contact" ? (
+              <Avatar className="w-12 h-12 ">
+                {chatData.image ? (
+                  <AvatarImage
+                    src={chatData.image}
+                    alt="profile"
+                    className="object-cover w-full rounded-full h-full bg-black"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    className={`uppercase h-12 w-12 text-xs border flex-center rounded-full ${getColor(
+                      chatData.color
+                    )}`}
+                  >
+                    {chatData.firstName && chatData.lastName
+                      ? splitName(chatData.firstName, chatData.lastName)
+                      : chatData.email.charAt(0)}
+                  </div>
+                )}
+              </Avatar>
+            ) : (
+              <div className="bg-[#ffffff22] h-10 w-10 flex items-center justify-center rounded-full">
+                #
+              </div>
+            )}
           </div>
-          <div className="flex flex-col">
-            <span className="font-medium">
-              {chatType === "contact" && chatData.firstName
-                ? `${chatData.firstName} ${chatData.lastName}`
-                : chatData.email}
-            </span>
-            <span className="text-xs mt-1">
-              {onlineUsers[chatData._id] ? (
-                <span className="tracking-wide">Online</span>
-              ) : (
-                <span className=" tracking-wide">Offline</span>
-              )}
-            </span>
-          </div>
+          {chatData === "contact" ? (
+            <div className="flex items-center flex-col">
+              <span className="font-medium">
+                {chatData.firstName
+                  ? `${chatData.firstName} ${chatData.lastName}`
+                  : chatData.email}
+              </span>
+              <span className="text-xs mt-1">
+                {onlineUsers[chatData._id] ? (
+                  <span className="tracking-wide">Online</span>
+                ) : (
+                  <span className=" tracking-wide">Offline</span>
+                )}
+              </span>
+            </div>
+          ) : (
+            <span className="mb-3">{chatData.name}</span>
+          )}
         </div>
         <div className="flex-center gap-5">
           <button

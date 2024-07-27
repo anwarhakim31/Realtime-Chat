@@ -66,7 +66,7 @@ export const getContactsForDMlist = async (req, res, next) => {
               else: "$sender",
             },
           },
-          lastMessageTime: { $first: "$timeStamp" }, // periksa apakah timestamp adalah field yang benar
+          lastMessageTime: { $first: "$timeStamp" },
         },
       },
       {

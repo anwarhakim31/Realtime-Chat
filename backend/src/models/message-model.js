@@ -8,13 +8,13 @@ const messageSchema = new mongoose.Schema({
   },
   recipient: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Corrected `Ref` to `ref`
-    required: false, // Corrected `requreid` to `required`
+    ref: "User",
+    required: false,
   },
   messageType: {
     type: String,
     enum: ["text", "file"],
-    required: true, // Corrected `requreid` to `required`
+    required: true,
   },
   content: {
     type: String,
