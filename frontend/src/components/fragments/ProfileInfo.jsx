@@ -38,7 +38,7 @@ const ProfileInfo = () => {
       });
 
       if (res.ok) {
-        navigate("/auth");
+        window.location.reload();
         dispatch(setUserData(null));
       }
     } catch (error) {

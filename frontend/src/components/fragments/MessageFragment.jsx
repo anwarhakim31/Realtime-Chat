@@ -6,12 +6,13 @@ import {
   setChatMessages,
 } from "@/store/slices/chat-slices";
 import { HOST } from "@/utils/constant";
-import { Download, FileArchive, Play, X } from "lucide-react";
+import { Download, FileArchive, FileText, Music2, Play, X } from "lucide-react";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ImageModal from "./media/ImageModal";
 import VideoModal from "./media/VideoModal";
+import MusicModal from "./media/MusicModal";
 
 const MessageFragment = () => {
   const fragmentRef = useRef();
@@ -24,6 +25,8 @@ const MessageFragment = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [showVideo, setShowVideo] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
+  const [showMusic, setShowMusic] = useState(false);
+  const [musicUrl, setMusicUrl] = useState("");
 
   useEffect(() => {
     if (fragmentRef.current) {
@@ -78,22 +81,32 @@ const MessageFragment = () => {
     return musicRegex.test(filePath);
   };
 
+  const checkIfDocument = (filePath) => {
+    const documentRegex = /\.(pdf|docx?|xlsx?|pptx?|txt|csv)$/i;
+    return documentRegex.test(filePath);
+  };
+
+  const checkIfArchive = (filePath) => {
+    const archiveRegex = /\.(rar|zip|7z|tar|gz|bz2)$/i;
+    return archiveRegex.test(filePath);
+  };
+
   ////////////////
 
   const handleDownloadFile = async (fileUrl) => {
     try {
-      const response = await fetch(fileUrl, {
+      const res = await fetch(fileUrl, {
         method: "GET",
         headers: {
           "Content-Type": "application/octet-stream",
         },
       });
 
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error("Network response was not ok");
       }
 
-      const blob = await response.blob();
+      const blob = await res.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = downloadUrl;
@@ -180,21 +193,59 @@ const MessageFragment = () => {
               </div>
             </div>
           )}
-
-          {/* (
-          <div className="flex items-center justify-center gap-4">
-            <span className="text-white/8- text-3xl bg-black/20 rounded-full p-3">
-              <FileArchive />
-            </span>
-            <span>{message.fileUrl.split("-").pop()}</span>
-            <span
-              onClick={() => handleDownloadFile(message.fileUrl)}
-              className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+          {checkIfMusic(message.fileUrl) && (
+            <div
+              className="relative bg-none flex-center flex-col cursor-pointer"
+              onClick={() => {
+                setShowMusic(true);
+                setMusicUrl(message.fileUrl);
+              }}
             >
-              <Download />
-            </span>
-          </div>
-          ) */}
+              <div>
+                <Music2
+                  className="bg-none text-[#8417ff]"
+                  width={50}
+                  height={50}
+                />
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center  bg-opacity-50">
+                <Play className="text-white w-10 h-10" />
+              </div>
+              <span className="text-sm mt-5">
+                {message.fileUrl.split("-").pop()}
+              </span>
+            </div>
+          )}
+
+          {checkIfDocument(message.fileUrl) && (
+            <div className="flex items-center justify-center gap-4">
+              <span className="text-white/8- text-3xl bg-black/20 rounded-full p-3">
+                <FileText />
+              </span>
+              <span>{message.fileUrl.split("-").pop()}</span>
+              <span
+                onClick={() => handleDownloadFile(message.fileUrl)}
+                className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+              >
+                <Download />
+              </span>
+            </div>
+          )}
+
+          {checkIfArchive(message.fileUrl) && (
+            <div className="flex items-center justify-center gap-4">
+              <span className="text-white/8- text-3xl bg-black/20 rounded-full p-3">
+                <FileArchive />
+              </span>
+              <span>{message.fileUrl.split("-").pop()}</span>
+              <span
+                onClick={() => handleDownloadFile(message.fileUrl)}
+                className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+              >
+                <Download />
+              </span>
+            </div>
+          )}
         </div>
       )}
 
@@ -225,6 +276,14 @@ const MessageFragment = () => {
           videoUrl={videoUrl}
           handleDownloadFile={handleDownloadFile}
           setVideoUrl={setVideoUrl}
+        />
+      )}
+      {showMusic && (
+        <MusicModal
+          setShowMusic={setShowMusic}
+          musicURl={musicUrl}
+          handleDownloadFile={handleDownloadFile}
+          setMusicUrl={setMusicUrl}
         />
       )}
     </div>
