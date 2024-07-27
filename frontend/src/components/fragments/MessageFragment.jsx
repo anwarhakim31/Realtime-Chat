@@ -4,6 +4,8 @@ import {
   selectedChatMessage,
   selectedChatType,
   setChatMessages,
+  setFileDownloadingProgress,
+  setIsDownloading,
 } from "@/store/slices/chat-slices";
 import { HOST } from "@/utils/constant";
 import { Download, FileArchive, FileText, Music2, Play, X } from "lucide-react";
@@ -13,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ImageModal from "./media/ImageModal";
 import VideoModal from "./media/VideoModal";
 import MusicModal from "./media/MusicModal";
+import axios from "axios";
 
 const MessageFragment = () => {
   const fragmentRef = useRef();
@@ -94,20 +97,21 @@ const MessageFragment = () => {
   ////////////////
 
   const handleDownloadFile = async (fileUrl) => {
+    dispatch(setFileDownloadingProgress(0));
     try {
-      const res = await fetch(fileUrl, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/octet-stream",
+      dispatch(setIsDownloading(true));
+      const res = await axios.get(fileUrl, {
+        responseType: "blob",
+        onDownloadProgress: (progressEvent) => {
+          const { loaded, total } = progressEvent;
+
+          const percentComplated = Math.round((loaded * 100) / total);
+
+          dispatch(setFileDownloadingProgress(percentComplated));
         },
       });
 
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const blob = await res.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
+      const downloadUrl = window.URL.createObjectURL(new Blob([res.data]));
       const a = document.createElement("a");
       a.href = downloadUrl;
       a.download = fileUrl.split("-").pop();
@@ -117,6 +121,8 @@ const MessageFragment = () => {
       window.URL.revokeObjectURL(downloadUrl);
     } catch (error) {
       console.error("There was an error downloading the file:", error);
+    } finally {
+      dispatch(setIsDownloading(false));
     }
   };
 
@@ -164,7 +170,7 @@ const MessageFragment = () => {
             message.sender !== chatData._id
               ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
               : "bg-[#2e2b33]/5 text-white/80 border-[#ffffff]/20"
-          } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+          } border inline-block p-4 rounded my-1 max-w-[70%] md:max-w-[100%] lg:max-w-[50%] break-words`}
         >
           {checkIfImage(message.fileUrl) && (
             <div

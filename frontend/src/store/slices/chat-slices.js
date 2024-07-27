@@ -5,12 +5,28 @@ const initialState = {
   chatData: undefined,
   chatMessage: [],
   directMessagerContacts: [],
+  isUploading: false,
+  isDownloading: false,
+  fileUploadingProgress: 0,
+  fileDownloadingProgress: 0,
 };
 
 const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    setIsUploading: (state, action) => {
+      state.isUploading = action.payload;
+    },
+    setIsDownloading: (state, action) => {
+      state.isDownloading = action.payload;
+    },
+    setFileUploadingProgress: (state, action) => {
+      state.fileUploadingProgress = action.payload;
+    },
+    setFileDownloadingProgress: (state, action) => {
+      state.fileDownloadingProgress = action.payload;
+    },
     setChatType: (state, action) => {
       state.chatType = action.payload;
     },
@@ -51,6 +67,10 @@ export const {
   setChatMessages,
   addMessage,
   setDirectMessagerContact,
+  setFileDownloadingProgress,
+  setFileUploadingProgress,
+  setIsDownloading,
+  setIsUploading,
 } = chatSlice.actions;
 export default chatSlice.reducer;
 
@@ -59,3 +79,9 @@ export const selectedChatType = (state) => state.chat.chatType;
 export const selectedChatMessage = (state) => state.chat.chatMessage;
 export const selectedDirectMessageContacts = (state) =>
   state.chat.directMessagerContacts;
+export const selectedIsUploading = (state) => state.chat.isUploading;
+export const selectedIsDownloading = (state) => state.chat.isDownloading;
+export const selectedFileDownloadingProgress = (state) =>
+  state.chat.fileDownloadingProgress;
+export const selectedFileUploadingProgress = (state) =>
+  state.chat.fileUploadingProgress;

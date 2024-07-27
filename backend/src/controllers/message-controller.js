@@ -25,7 +25,6 @@ export const getMessage = async (req, res, next) => {
     next(error);
   }
 };
-
 export const uploadFile = async (req, res, next) => {
   try {
     if (!req.file) {
@@ -39,16 +38,20 @@ export const uploadFile = async (req, res, next) => {
       Bucket: process.env.AWS_S3_BUCKET,
       Key: `file/${Date.now().toString()}-${file.originalname}`,
       Body: fileStream,
-      ACL: "public-read",
+      ACL: "public-read", // Pertimbangkan kembali apakah ini benar-benar diperlukan
     };
 
+    // Menggunakan `await` langsung pada `send` untuk mendapatkan response
     const data = await s3.send(new PutObjectCommand(uploadParams));
 
     const fileName = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${uploadParams.Key}`;
 
+    // Tutup stream setelah upload selesai
+    fileStream.close();
+
     res.status(200).json({
       success: true,
-      message: "Succesfully upload file.",
+      message: "Successfully uploaded file.",
       filePath: fileName,
     });
   } catch (error) {

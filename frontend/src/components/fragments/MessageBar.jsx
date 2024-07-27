@@ -5,8 +5,11 @@ import {
   selectedChatData,
   selectedChatMessage,
   selectedChatType,
+  setFileUploadingProgress,
+  setIsUploading,
 } from "@/store/slices/chat-slices";
 import { HOST } from "@/utils/constant";
+import axios from "axios";
 import EmojiPicker from "emoji-picker-react";
 import { Paperclip, SendHorizonal, Sticker } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -62,38 +65,51 @@ const MessageBar = () => {
 
   const handleAttachmentChange = async (e) => {
     const file = e.target.files[0];
-    const maxSize = 5 * 1024 * 1024; // 2 MB dalam bytes
+    const maxSize = 5 * 1024 * 1024; // 5 MB dalam bytes
+
     if (file && file.size > maxSize) {
       toast.error("File too large. Maximum size is 5MB.");
-    } else {
+      return;
+    }
+
+    if (file) {
+      dispatch(setIsUploading(true));
+      dispatch(setFileUploadingProgress(0));
+      const formData = new FormData();
+      formData.append("file", file);
+
       try {
-        if (file) {
-          const formData = new FormData();
+        const res = await axios.post(
+          HOST + "/api/messages/upload-file",
+          formData,
+          {
+            withCredentials: true, // jika diperlukan
+            onUploadProgress: (event) => {
+              const progress = Math.round((event.loaded * 100) / event.total);
+              console.log(`Upload progress: ${progress}%`); // Debug log
+              dispatch(setFileUploadingProgress(progress));
+            },
+          }
+        );
 
-          formData.append("file", file);
+        console.log(res);
 
-          const res = await fetch(HOST + "/api/messages/upload-file", {
-            method: "POST",
-            body: formData,
-            credentials: "include",
-          });
-
-          const data = await res.json();
-
-          if (res.ok) {
-            if (chatType === "contact") {
-              socket.emit("sendMessage", {
-                sender: userData._id,
-                recipient: chatData._id,
-                messageType: "file",
-                content: undefined,
-                fileUrl: data.filePath,
-              });
-            }
+        if (res.status === 200) {
+          if (chatType === "contact") {
+            socket.emit("sendMessage", {
+              sender: userData._id,
+              recipient: chatData._id,
+              messageType: "file",
+              content: undefined,
+              fileUrl: res.data.filePath,
+            });
           }
         }
       } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
+        toast.error("Upload failed.");
+      } finally {
+        dispatch(setIsUploading(false));
       }
     }
   };
