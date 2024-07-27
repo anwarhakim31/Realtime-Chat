@@ -12,6 +12,7 @@ import { Paperclip, SendHorizonal, Sticker } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
 
 const MessageBar = () => {
   const emojiRef = useRef(null);
@@ -61,35 +62,39 @@ const MessageBar = () => {
 
   const handleAttachmentChange = async (e) => {
     const file = e.target.files[0];
+    const maxSize = 5 * 1024 * 1024; // 2 MB dalam bytes
+    if (file && file.size > maxSize) {
+      toast.error("File too large. Maximum size is 5MB.");
+    } else {
+      try {
+        if (file) {
+          const formData = new FormData();
 
-    try {
-      if (file) {
-        const formData = new FormData();
+          formData.append("file", file);
 
-        formData.append("file", file);
+          const res = await fetch(HOST + "/api/messages/upload-file", {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+          });
 
-        const res = await fetch(HOST + "/api/messages/upload-file", {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        });
+          const data = await res.json();
 
-        const data = await res.json();
-
-        if (res.ok) {
-          if (chatType === "contact") {
-            socket.emit("sendMessage", {
-              sender: userData._id,
-              recipient: chatData._id,
-              messageType: "file",
-              content: undefined,
-              fileUrl: data.filePath,
-            });
+          if (res.ok) {
+            if (chatType === "contact") {
+              socket.emit("sendMessage", {
+                sender: userData._id,
+                recipient: chatData._id,
+                messageType: "file",
+                content: undefined,
+                fileUrl: data.filePath,
+              });
+            }
           }
         }
+      } catch (error) {
+        console.log(error.message);
       }
-    } catch (error) {
-      console.log(error.message);
     }
   };
 

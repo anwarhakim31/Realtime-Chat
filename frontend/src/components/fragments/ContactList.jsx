@@ -77,7 +77,11 @@ const ContactList = ({ contacts, isChannel = false }) => {
                         : contact.email}
                     </span>
                     <span className="text-xs">
-                      {onlineUser[contact._id] ? "Online" : "Offline"}
+                      {onlineUser[contact._id] ? (
+                        <span className="tracking-wide">Online</span>
+                      ) : (
+                        <span className=" tracking-wide">Offline</span>
+                      )}
                     </span>
                   </div>
                 )}

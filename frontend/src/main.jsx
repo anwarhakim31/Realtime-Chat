@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <SocketProvider>
       <App />
-      <Toaster closeButton />
+      <Toaster closeButton position="top-center" />
     </SocketProvider>
   </Provider>
   // </React.StrictMode>

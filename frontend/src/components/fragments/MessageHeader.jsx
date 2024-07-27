@@ -27,7 +27,7 @@ const MessageHeader = () => {
                 <AvatarImage
                   src={chatData.image}
                   alt="profile"
-                  className="object-cover w-full rounded-fullh-full bg-black"
+                  className="object-cover w-full rounded-full h-full bg-black"
                   loading="lazy"
                 />
               ) : (
@@ -49,8 +49,12 @@ const MessageHeader = () => {
                 ? `${chatData.firstName} ${chatData.lastName}`
                 : chatData.email}
             </span>
-            <span className="text-xs">
-              {onlineUsers[chatData._id] ? "Online" : "Offline"}
+            <span className="text-xs mt-1">
+              {onlineUsers[chatData._id] ? (
+                <span className="tracking-wide">Online</span>
+              ) : (
+                <span className=" tracking-wide">Offline</span>
+              )}
             </span>
           </div>
         </div>
