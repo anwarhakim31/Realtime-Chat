@@ -29,7 +29,7 @@ const messageSchema = new mongoose.Schema({
     },
   },
   timeStamp: {
-    type: Date, // Use JavaScript's `Date` type
+    type: Date,
     default: Date.now,
   },
 });
