@@ -23,6 +23,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { useDispatch } from "react-redux";
 import { setChatData, setChatType } from "@/store/slices/chat-slices";
+import { Button } from "../ui/button";
+import MultipleSelector from "../ui/multipleselect";
 
 export const splitName = (firstName, lastName) => {
   const result = [];
@@ -39,51 +41,38 @@ export const splitName = (firstName, lastName) => {
 const Channel = () => {
   const dispatch = useDispatch();
 
-  const [openNewContactModal, setOpenNewContactModal] = useState(false);
+  const [newChannelModal, setNewChannelModal] = useState(false);
   const [search, setSearch] = useState("");
   const [searchedContacts, setSearchedContacts] = useState([]);
-
-  const handleSearch = async (e) => {
-    setSearch(e.target.value);
-  };
+  const [selectedContacts, setSelectedContacts] = useState([]);
+  const [allContact, setAllContact] = useState([]);
+  const [channelName, setChannelName] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getData = async () => {
       try {
-        const res = await fetch(HOST + "/api/contacts/search", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ search }),
+        const res = await fetch(HOST + "/api/contacts/get-all-contacts", {
+          method: "GET",
           credentials: "include",
         });
-        const data = await res.json();
 
+        const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.message);
-        } else {
-          setSearchedContacts(data.contact);
+          throw new Error(data.erorrs);
+        }
+
+        if (res.ok) {
+          setAllContact(data.contacts);
         }
       } catch (error) {
         toast.error(error.message);
       }
     };
 
-    if (search.length > 0) {
-      fetchData();
-    } else {
-      setSearchedContacts([]);
-    }
-  }, [search]);
+    getData();
+  }, []);
 
-  const selectNewContact = (contact) => {
-    setOpenNewContactModal(false);
-    dispatch(setChatType("contact"));
-    dispatch(setChatData(contact));
-    setSearch("");
-    setSearchedContacts([]);
-  };
+  const handleCreateChannel = async () => {};
 
   return (
     <>
@@ -91,30 +80,52 @@ const Channel = () => {
         <Tooltip>
           <TooltipTrigger>
             <Plus
-              onClick={() => setOpenNewContactModal(true)}
+              onClick={() => setNewChannelModal(true)}
               className="text-neutral-400 font-light text-opacity-90 text-start hover:text-neutral-100 cursor-pointer transition-all duration-300"
             />
           </TooltipTrigger>
           <TooltipContent className="bg-[#1c1b1e] border-none mt-2 p-3 text-white">
-            Select New Contact
+            Create New Channel
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <Dialog open={openNewContactModal} onOpenChange={setOpenNewContactModal}>
+      <Dialog open={newChannelModal} onOpenChange={setNewChannelModal}>
         <DialogContent className="bg-[#181920] border-none text-white w-full max-w-[400px] min-h-[400px] flex flex-col">
           <DialogHeader>
             <DialogTitle className={"text-center"}>
-              Please select a contact
+              Please fill up the details for new channel.
             </DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
           <div className="mb-4">
             <Input
-              placeholder="Search contacts..."
+              placeholder="Channel Name..."
               className="rounded-lg p-6 bg-[#2c2e3b] border-none"
-              onChange={handleSearch}
-              value={search}
+              onChange={(e) => setChannelName(e.target.value)}
+              value={channelName}
             />
+          </div>
+          <div>
+            <MultipleSelector
+              className="rounded-lg bg-[#2c2e3b] border-none py-2 text-white"
+              defaultOptions={allContact}
+              placeholder="Search Contacts"
+              value={selectedContacts}
+              onChange={setSelectedContacts}
+              emptyIndicator={
+                <p className="text-center text-lg leading-6 text-gray-600">
+                  No result found.
+                </p>
+              }
+            />
+          </div>
+          <div>
+            <Button
+              className="w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300"
+              onClick={handleCreateChannel}
+            >
+              Create Channel
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

@@ -100,7 +100,6 @@ export const getContactsForDMlist = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "Succesfully get list.", contacts });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -114,6 +113,7 @@ export const getAllContacts = async (req, res, next) => {
 
     const contacts = users.map((user) => ({
       label: user.firstName ? `${user.firstName} ${user.lastName}` : user.email,
+      value: user._id,
     }));
 
     res

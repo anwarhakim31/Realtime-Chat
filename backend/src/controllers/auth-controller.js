@@ -216,7 +216,7 @@ export const removeProfileImage = async (req, res, next) => {
     if (!user) {
       throw new ResponseError(404, "User is not found");
     }
-    console.log(user);
+
     user.image = null;
 
     await user.save();
