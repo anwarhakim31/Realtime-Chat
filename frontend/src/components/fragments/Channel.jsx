@@ -36,7 +36,7 @@ export const splitName = (firstName, lastName) => {
   return result.join("");
 };
 
-const NewDm = () => {
+const Channel = () => {
   const dispatch = useDispatch();
 
   const [openNewContactModal, setOpenNewContactModal] = useState(false);
@@ -61,7 +61,7 @@ const NewDm = () => {
         const data = await res.json();
 
         if (!res.ok) {
-          throw new Error(data.errors);
+          throw new Error(data.message);
         } else {
           setSearchedContacts(data.contact);
         }
@@ -116,76 +116,10 @@ const NewDm = () => {
               value={search}
             />
           </div>
-
-          {searchedContacts.length <= 0 ? (
-            <div>
-              <div className="flex-1 flex flex-col mt-5 justify-center items-center  duration-1000 transition-all">
-                <Lottie2
-                  isClickToPauseDisabled={true}
-                  height={100}
-                  width={100}
-                  options={animationDefaultOption}
-                />
-                <div className="text-opacity-80 text-white flex flex-col gap-5 items-center mt-10 lg:text-2xl text-xl transition-all duration-300 text-center">
-                  <h3 className=" poppins-medium">
-                    Search new
-                    <span className="text-purple-500"> contacts.</span>
-                  </h3>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <ScrollArea className="h-[230px]">
-              <div className="flex flex-col gap-5">
-                {searchedContacts.map((contact) => (
-                  <div
-                    key={contact._id}
-                    className="flex gap-3 items-center cursor-pointer"
-                    onClick={() => selectNewContact(contact)}
-                  >
-                    <div className="w-12 h-12 rounded-full relative">
-                      <Avatar className={"w-12 h-12 rounded-full"}>
-                        {contact.image ? (
-                          <AvatarImage
-                            src={contact.image}
-                            alt="profile"
-                            className={
-                              "object-cover w-full h-full rounded-full bg-black"
-                            }
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div
-                            className={`uppercase h-12 w-12  text-xs border flex-center rounded-full ${getColor(
-                              contact.color
-                            )}`}
-                          >
-                            {contact.firstName && contact.lastName
-                              ? splitName(contact.firstName, contact.lastName)
-                              : contact.email.split("").shift()}
-                          </div>
-                        )}
-                      </Avatar>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="">
-                        {contact.firstName && contact.lastName
-                          ? `${contact.firstName} ${contact.lastName}`
-                          : contact.email}
-                      </span>
-                      <span>
-                        <span className="text-xs">{contact.email}</span>
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          )}
         </DialogContent>
       </Dialog>
     </>
   );
 };
 
-export default NewDm;
+export default Channel;

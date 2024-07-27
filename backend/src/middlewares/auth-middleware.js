@@ -5,7 +5,10 @@ export const verifyToken = (req, res, next) => {
   const token = req.cookies.jwt;
 
   if (!token) {
-    throw new ResponseError(401, "You are not authenticated!");
+    throw new ResponseError(
+      401,
+      "You are not authenticated, Please log out to continue."
+    );
   }
 
   jwt.verify(token, process.env.JWT_KEY, async (err, payload) => {

@@ -14,11 +14,13 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useRef } from "react";
+import { setChatData } from "@/store/slices/chat-slices";
 
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector(selectedUserData);
+
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",

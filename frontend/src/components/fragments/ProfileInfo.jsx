@@ -1,5 +1,6 @@
 import { getColor } from "@/lib/utils";
 import { selectedUserData, setUserData } from "@/store/slices/auth-slices";
+import { setOnlineStatus } from "@/store/slices/users-slices";
 import { HOST } from "@/utils/constant";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { TooltipContent } from "@radix-ui/react-tooltip";
@@ -38,8 +39,9 @@ const ProfileInfo = () => {
       });
 
       if (res.ok) {
-        window.location.reload();
-        dispatch(setUserData(null));
+        dispatch(setOnlineStatus({}));
+
+        navigate("/auth");
       }
     } catch (error) {
       toast.error(error.message);

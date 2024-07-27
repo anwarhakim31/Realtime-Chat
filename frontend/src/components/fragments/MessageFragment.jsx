@@ -16,6 +16,7 @@ import ImageModal from "./media/ImageModal";
 import VideoModal from "./media/VideoModal";
 import MusicModal from "./media/MusicModal";
 import axios from "axios";
+import { toast } from "sonner";
 
 const MessageFragment = () => {
   const fragmentRef = useRef();
@@ -51,11 +52,15 @@ const MessageFragment = () => {
 
         const data = await res.json();
 
+        if (!res.ok) {
+          throw new Error(data.errors);
+        }
+
         if (data.messages) {
           dispatch(setChatMessages(data.messages));
         }
       } catch (error) {
-        console.log(error);
+        toast.error(error.message);
       }
     };
 

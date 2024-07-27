@@ -10,6 +10,7 @@ import {
   setDirectMessagerContact,
 } from "@/store/slices/chat-slices";
 import ContactList from "../fragments/ContactList";
+import Channel from "../fragments/Channel";
 
 const ContactLayout = () => {
   const directMessageContaacts = useSelector(selectedDirectMessageContacts);
@@ -58,6 +59,7 @@ const ContactLayout = () => {
       <div className="my-5">
         <div className="flex-between pr-10">
           <Title text="Channel" />
+          <Channel />
         </div>
       </div>
       <ProfileInfo />
