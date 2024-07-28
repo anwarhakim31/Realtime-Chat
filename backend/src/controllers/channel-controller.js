@@ -51,8 +51,9 @@ export const createChannels = async (req, res, next) => {
 export const getChannels = async (req, res, next) => {
   try {
     const userId = new mongoose.Types.ObjectId(req.userId);
+
     const channel = await Channel.find({
-      $or: [{ admin: userId }, { member: userId }],
+      $or: [{ admin: userId }, { members: userId }],
     }).sort({ updatedAt: -1 });
 
     res.status(201).json({
@@ -62,6 +63,30 @@ export const getChannels = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+};
+
+export const getChannelMessages = async (req, res, next) => {
+  try {
+    const { channelId } = req.params;
+
+    const channel = await Channel.findById(channelId).populate({
+      path: "messages",
+      populate: {
+        path: "sender",
+        select: "firstName lastName email _id image color",
+      },
+    });
+
+    if (!channel) {
+      throw new ResponseError(400, "Channel is not found");
+    }
+
+    const messages = channel.messages;
+
+    res.status(200).json({ success: true, messages });
+  } catch (error) {
     next(error);
   }
 };

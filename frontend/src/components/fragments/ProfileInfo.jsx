@@ -1,5 +1,6 @@
 import { getColor } from "@/lib/utils";
 import { selectedUserData, setUserData } from "@/store/slices/auth-slices";
+import { setChatType } from "@/store/slices/chat-slices";
 import { setOnlineStatus } from "@/store/slices/users-slices";
 import { HOST } from "@/utils/constant";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
@@ -40,6 +41,7 @@ const ProfileInfo = () => {
 
       if (res.ok) {
         dispatch(setOnlineStatus({}));
+        dispatch(setUserData(undefined));
 
         navigate("/auth");
       }

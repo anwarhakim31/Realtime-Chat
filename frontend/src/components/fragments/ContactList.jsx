@@ -18,8 +18,6 @@ const ContactList = ({ contacts, isChannel = false }) => {
   const chatType = useSelector(selectedChatType);
   const onlineUser = useSelector(selectedOnlineUser);
 
-  console.log(contacts);
-
   const handleClick = (contact) => {
     if (isChannel) {
       dispatch(setChatType("channel"));
@@ -77,11 +75,13 @@ const ContactList = ({ contacts, isChannel = false }) => {
               </div>
             )}
             {isChannel ? (
-              <span className="">{contact.name}</span>
+              <span className="truncate w-full md:max-w-[150px] lg:max-w-[180px] ">
+                {contact.name}
+              </span>
             ) : (
               <div className="flex flex-col">
                 <span className="font-medium">
-                  {chatType === "contact" && contact.firstName
+                  {contact.firstName
                     ? `${contact.firstName} ${contact.lastName}`
                     : contact.email}
                 </span>

@@ -17,6 +17,9 @@ import VideoModal from "./media/VideoModal";
 import MusicModal from "./media/MusicModal";
 import axios from "axios";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { splitName } from "./NewDm";
+import { getColor } from "@/lib/utils";
 
 const MessageFragment = () => {
   const fragmentRef = useRef();
@@ -64,9 +67,30 @@ const MessageFragment = () => {
       }
     };
 
+    const getChannelMessage = async () => {
+      try {
+        const res = await fetch(
+          HOST + "/api/channel/get-channel-messages/" + chatData._id,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        const data = await res.json();
+
+        if (res.ok) {
+          dispatch(setChatMessages(data.messages));
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+
     if (chatData._id) {
       if (chatType === "contact") {
         getMessages();
+      } else if (chatType === "channel") {
+        getChannelMessage();
       }
     }
   }, [chatType, chatData]);
@@ -147,6 +171,7 @@ const MessageFragment = () => {
             </div>
           )}
           {chatType === "contact" && renderDmMessages(message)}
+          {chatType === "channel" && renderChannelMessages(message)}
         </div>
       );
     });
@@ -164,7 +189,7 @@ const MessageFragment = () => {
             message.sender !== chatData._id
               ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
               : "bg-[#2e2b33]/5 text-white/80 border-[#ffffff]/20"
-          } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+          } border inline-block p-4 rounded my-1 max-w-[50%] break-wordss`}
         >
           {message.content}
         </div>
@@ -175,7 +200,7 @@ const MessageFragment = () => {
             message.sender !== chatData._id
               ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
               : "bg-[#2e2b33]/5 text-white/80 border-[#ffffff]/20"
-          } border inline-block p-4 rounded my-1 max-w-[70%] md:max-w-[100%] lg:max-w-[50%] break-words`}
+          } border inline-block p-4 rounded my-1 max-w-[70%] md:max-w-[100%] lg:max-w-[50%] break-wordss`}
         >
           {checkIfImage(message.fileUrl) && (
             <div
@@ -265,6 +290,154 @@ const MessageFragment = () => {
       </div>
     </div>
   );
+
+  const renderChannelMessages = (message) => {
+    return (
+      <div
+        className={`mt-5 ${
+          message.sender._id !== userData._id ? "text-left" : "text-right"
+        }`}
+      >
+        {message.messageType === "text" && (
+          <div
+            className={`${
+              message.sender !== chatData._id
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2e2b33]/5 text-white/80 border-[#ffffff]/20"
+            } border wore inline-block p-4 rounded my-1 max-w-[50%] break-wordss ml-10`}
+          >
+            {message.content}
+          </div>
+        )}
+        {message.messageType === "file" && (
+          <div
+            className={`${
+              message.sender._id !== userData._id
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2e2b33]/5 text-white/80 border-[#ffffff]/20"
+            } border inline-block p-4 rounded my-1 max-w-[70%] md:max-w-[100%] lg:max-w-[50%] break-wordss`}
+          >
+            {checkIfImage(message.fileUrl) && (
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  setShowImage(true);
+                  setImageUrl(message.fileUrl);
+                }}
+              >
+                <img
+                  src={message.fileUrl}
+                  height={300}
+                  width={300}
+                  alt="image"
+                />
+              </div>
+            )}
+            {checkIfVideo(message.fileUrl) && (
+              <div
+                className="relative cursor-pointer"
+                onClick={() => {
+                  setShowVideo(true);
+                  setVideoUrl(message.fileUrl);
+                }}
+              >
+                <video width={300} height={300}>
+                  <source src={message.fileUrl} type="video/mp4" />
+                </video>
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                  <Play className="text-white w-10 h-10" />
+                </div>
+              </div>
+            )}
+            {checkIfMusic(message.fileUrl) && (
+              <div
+                className="relative bg-none flex-center flex-col cursor-pointer"
+                onClick={() => {
+                  setShowMusic(true);
+                  setMusicUrl(message.fileUrl);
+                }}
+              >
+                <div>
+                  <Music2
+                    className="bg-none text-[#8417ff]"
+                    width={50}
+                    height={50}
+                  />
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center  bg-opacity-50">
+                  <Play className="text-white w-10 h-10" />
+                </div>
+                <span className="text-sm mt-5">
+                  {message.fileUrl.split("-").pop()}
+                </span>
+              </div>
+            )}
+
+            {checkIfDocument(message.fileUrl) && (
+              <div className="flex items-center justify-center gap-4">
+                <span className="text-white/8- text-3xl bg-black/20 rounded-full p-3">
+                  <FileText />
+                </span>
+                <span>{message.fileUrl.split("-").pop()}</span>
+                <span
+                  onClick={() => handleDownloadFile(message.fileUrl)}
+                  className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                >
+                  <Download />
+                </span>
+              </div>
+            )}
+
+            {checkIfArchive(message.fileUrl) && (
+              <div className="flex items-center justify-center gap-4">
+                <span className="text-white/8- text-3xl bg-black/20 rounded-full p-3">
+                  <FileArchive />
+                </span>
+                <span>{message.fileUrl.split("-").pop()}</span>
+                <span
+                  onClick={() => handleDownloadFile(message.fileUrl)}
+                  className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                >
+                  <Download />
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+        {message.sender._id !== userData._id ? (
+          <div className="flex items-center mt-1 justify-start gap-3">
+            <Avatar className="w-8 h-8 ">
+              {message.sender.image && (
+                <AvatarImage
+                  src={message.sender.image}
+                  alt="profile"
+                  className="object-cover w-full rounded-full h-full bg-black"
+                  loading="lazy"
+                />
+              )}
+              <AvatarFallback
+                className={`uppercase h-8 w-8 flex-center text-xs  flex-center rounded-full ${getColor(
+                  message.sender.color
+                )}`}
+              >
+                {message.sender.firstName && message.sender.lastName
+                  ? splitName(message.sender.firstName, message.sender.lastName)
+                  : message.sender.email.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-sm text-white/60">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
+            <span className="text-xs text-white/60">
+              {moment(message.timeStamp).format("LT")}
+            </span>
+          </div>
+        ) : (
+          <span className="text-xs block text-white/60 mt-1">
+            {moment(message.timeStamp).format("LT")}
+          </span>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div

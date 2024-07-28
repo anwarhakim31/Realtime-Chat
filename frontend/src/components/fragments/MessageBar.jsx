@@ -33,8 +33,6 @@ const MessageBar = () => {
     setMessage((msg) => msg + emoji.emoji);
   };
 
-  console.log(chatMassage);
-
   const handleSendMessage = async () => {
     if (message.length !== 0) {
       if (chatType === "contact") {
@@ -91,16 +89,14 @@ const MessageBar = () => {
           HOST + "/api/messages/upload-file",
           formData,
           {
-            withCredentials: true, // jika diperlukan
+            withCredentials: true,
             onUploadProgress: (event) => {
               const progress = Math.round((event.loaded * 100) / event.total);
-              console.log(`Upload progress: ${progress}%`); // Debug log
+
               dispatch(setFileUploadingProgress(progress));
             },
           }
         );
-
-        console.log(res);
 
         if (res.status === 200) {
           if (chatType === "contact") {
@@ -114,18 +110,18 @@ const MessageBar = () => {
           } else if (chatType === "channel") {
             socket.emit("sendMessage-channel", {
               sender: userData._id,
-              content: message,
-              messageType: "text",
-              fileUrl: undefined,
+              content: undefined,
+              messageType: "file",
+              fileUrl: res.data.filePath,
               channelId: chatData._id,
             });
           }
         }
       } catch (error) {
-        console.error(error.message);
         toast.error("Upload failed.");
       } finally {
         dispatch(setIsUploading(false));
+        fileInputRef.current.value = "";
       }
     }
   };

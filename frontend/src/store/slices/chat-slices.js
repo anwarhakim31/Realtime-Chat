@@ -16,12 +16,29 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    addChannelInChannelList: (state, action) => {
+      const channels = state.channels;
+
+      const data = channels.find(
+        (channel) => channel._id === action.payload.channelId
+      );
+
+      const index = channels.findIndex(
+        (channel) => channel._id === action.payload.channelId
+      );
+
+      if (index !== -1) {
+        channels.splice(index, 1);
+        channels.unshift(data);
+      }
+    },
     setChannel: (state, action) => {
       state.channels = action.payload;
     },
     addChannel: (state, action) => {
       state.channels.unshift(action.payload);
     },
+
     setIsUploading: (state, action) => {
       state.isUploading = action.payload;
     },
@@ -80,6 +97,7 @@ export const {
   setIsUploading,
   addChannel,
   setChannel,
+  addChannelInChannelList,
 } = chatSlice.actions;
 export default chatSlice.reducer;
 

@@ -21,10 +21,11 @@ import { useDispatch } from "react-redux";
 import { Button } from "../ui/button";
 import MultipleSelector from "../ui/multipleselect";
 import { addChannel } from "@/store/slices/chat-slices";
+import { useSocket } from "@/contexts/SocketContext";
 
 const Channel = () => {
   const dispatch = useDispatch();
-
+  const socket = useSocket();
   const [newChannelModal, setNewChannelModal] = useState(false);
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [allContact, setAllContact] = useState([]);
@@ -69,15 +70,15 @@ const Channel = () => {
           credentials: "include",
         });
         const data = await res.json();
-        console.log(data);
 
         if (!res.ok) {
           throw new Error(data.errors);
         } else {
+          dispatch(addChannel(data.channel));
+          socket.emit("channelCreated", data.channel);
           setChannelName("");
           setSelectedContacts([]);
           setNewChannelModal(false);
-          dispatch(addChannel(data.channel));
         }
       }
     } catch (error) {

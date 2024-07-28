@@ -97,3 +97,7 @@
   background-color: #741bda !important;
   border-radius: 2px !important;
 }
+
+.break-wordss {
+  word-break: break-all;
+}

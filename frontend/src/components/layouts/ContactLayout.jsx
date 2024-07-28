@@ -6,7 +6,9 @@ import NewDm from "../fragments/NewDm";
 import { HOST } from "@/utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addChannelInChannelList,
   selectedChannels,
+  selectedChatMessage,
   selectedDirectMessageContacts,
   setChannel,
   setDirectMessagerContact,
@@ -36,7 +38,6 @@ const ContactLayout = () => {
 
         if (data.contacts) {
           dispatch(setDirectMessagerContact(data.contacts));
-          console.log(data.contacts);
         }
       } catch (error) {
         toast.log(error);
@@ -51,7 +52,6 @@ const ContactLayout = () => {
         });
 
         const data = await res.json();
-        console.log(data);
 
         if (!res.ok) {
           throw new Error(data.errors);
@@ -67,9 +67,7 @@ const ContactLayout = () => {
 
     getContact();
     getChannel();
-  }, []);
-
-  console.log(channel);
+  }, [selectedChannels, selectedDirectMessageContacts]);
 
   return (
     <div className="relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-template border-r-2 border-[#2f303b] ">
@@ -81,7 +79,7 @@ const ContactLayout = () => {
           <Title text="Direct Messages" />
           <NewDm />
         </div>
-        <div className="max-h-[38vh] overflow-y-auto scrollbar-hidden">
+        <div className="max-h-[38vh] overflow-y-auto scroll-h">
           <ContactList contacts={directMessageContaacts} />
         </div>
       </div>

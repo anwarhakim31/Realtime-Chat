@@ -1,6 +1,8 @@
 import { selectedUserData } from "@/store/slices/auth-slices";
 import {
+  addChannelInChannelList,
   addMessage,
+  selectedChannels,
   selectedChatData,
   selectedChatMessage,
   selectedChatType,
@@ -12,6 +14,7 @@ import io from "socket.io-client";
 import Cookie from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { setOfflineStatus, setOnlineStatus } from "@/store/slices/users-slices";
+import { toast } from "sonner";
 
 const SocketContext = createContext(null);
 
@@ -21,7 +24,9 @@ const SocketProvider = ({ children }) => {
   const socket = useRef();
   const userData = useSelector(selectedUserData);
   const chatData = useSelector(selectedChatData);
-  const chatType = useSelector(selectedChatType);
+  const chatMessage = useSelector(selectedChatType);
+  const chatType = useSelector(selectedChatMessage);
+  const channel = useSelector(selectedChannels);
   const dispatch = useDispatch();
   const cookie = Cookie.get("jwt");
 
@@ -47,14 +52,23 @@ const SocketProvider = ({ children }) => {
         }
       });
 
+      if (channel) {
+        socket.current.on("newChannel", (channel) => {
+          // Handle the new channel event
+          dispatch(addChannelInChannelList(channel));
+        });
+      }
+
       return () => {
-        // socket.current.off("receiveMessage");
+        socket.current.off("newChannel");
         socket.current.off("userStatus");
         socket.current.disconnect();
         console.log("Socket disconnected");
       };
     }
   }, [cookie, userData]);
+
+  console.log(channel);
 
   useEffect(() => {
     if (chatData) {
@@ -70,13 +84,29 @@ const SocketProvider = ({ children }) => {
         }
       };
 
+      const handleReceiveChannelMessage = (message) => {
+        if (
+          selectedChatType !== undefined &&
+          chatData._id === message.channelId
+        ) {
+          dispatch(addMessage(message));
+        }
+        dispatch(addChannelInChannelList(message));
+      };
+
       socket.current.on("receiveMessage", handleMessage);
+      socket.current.on("receive-channel-message", handleReceiveChannelMessage);
 
       return () => {
         socket.current.off("receiveMessage", handleMessage);
+        socket.current.off("channelCreated");
+        socket.current.off(
+          "receive-channel-message",
+          handleReceiveChannelMessage
+        );
       };
     }
-  }, [chatData, chatType]);
+  }, [chatData, chatType, chatMessage]);
 
   return (
     <SocketContext.Provider value={socket.current}>
