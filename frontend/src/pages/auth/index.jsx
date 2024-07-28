@@ -93,7 +93,7 @@ const Auth = () => {
         <div className="flex flex-col gap-10 items-center justify-center w-full">
           <div className="flex items-center justify-center flex-col">
             <div className="flex items-center justify-center">
-              <div className="text-4xl sm:text-5xl font-bold md:text-6xl">
+              <div className="text-2xl sm:text-5xl font-bold md:text-6xl">
                 Welcome
               </div>
               <img
@@ -102,7 +102,7 @@ const Auth = () => {
                 className="h-[50px] sm:h-[100px]"
               />
             </div>
-            <p className="font-medium text-center">
+            <p className="font-medium text-sm md:text-xl text-center">
               Fill in details to get started with the best chat app!
             </p>
           </div>

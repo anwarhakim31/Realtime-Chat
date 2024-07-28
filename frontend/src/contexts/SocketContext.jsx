@@ -28,7 +28,6 @@ const SocketProvider = ({ children }) => {
   const chatData = useSelector(selectedChatData);
   const chatMessage = useSelector(selectedChatType);
   const chatType = useSelector(selectedChatMessage);
-  const contact = useSelector(selectedDirectMessageContacts);
   const dispatch = useDispatch();
   const cookie = Cookie.get("jwt");
 
@@ -42,11 +41,10 @@ const SocketProvider = ({ children }) => {
       });
 
       socket.current.on("connect", () => {
-        console.log("Connected to socket server");
+        // console.log("Connected to socket server");
       });
 
       socket.current.on("userStatus", ({ userId, status }) => {
-        // console.log("User status update:", { userId, status });
         if (status === "online") {
           dispatch(setOnlineStatus(userId));
         } else {
@@ -66,7 +64,7 @@ const SocketProvider = ({ children }) => {
         socket.current.off("newChannel");
         socket.current.off("userStatus");
         socket.current.disconnect();
-        console.log("Socket disconnected");
+        // console.log("Socket disconnected");
       };
     }
   }, [cookie, userData]);
@@ -108,8 +106,6 @@ const SocketProvider = ({ children }) => {
       };
     }
   }, [chatData, chatType, chatMessage]);
-
-  console.log(contact);
 
   return (
     <SocketContext.Provider value={socket.current}>

@@ -1,11 +1,10 @@
 import {
   selectedChatData,
-  selectedChatType,
   setChatData,
   setChatMessages,
   setChatType,
 } from "@/store/slices/chat-slices";
-import React from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { splitName } from "./NewDm";
@@ -15,7 +14,6 @@ import { selectedOnlineUser } from "@/store/slices/users-slices";
 const ContactList = ({ contacts, isChannel = false }) => {
   const dispatch = useDispatch();
   const chatData = useSelector(selectedChatData);
-  const chatType = useSelector(selectedChatType);
   const onlineUser = useSelector(selectedOnlineUser);
 
   const handleClick = (contact) => {
