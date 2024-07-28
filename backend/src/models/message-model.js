@@ -28,6 +28,10 @@ const messageSchema = new mongoose.Schema({
       return this.messageType === "file";
     },
   },
+  isRead: {
+    type: Boolean,
+    default: false,
+  },
   timeStamp: {
     type: Date,
     default: Date.now,
