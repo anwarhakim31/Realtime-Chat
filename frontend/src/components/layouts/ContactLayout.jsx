@@ -81,7 +81,7 @@ const ContactLayout = () => {
           <Title text="Direct Messages" />
           <NewDm />
         </div>
-        <div className="max-h-[38vh] overflow-y-auto scroll-h">
+        <div className="max-h-[30vh] xs:max-h-[38vh] overflow-y-auto scroll-h">
           <ContactList contacts={directMessageContaacts} />
         </div>
       </div>
@@ -90,7 +90,7 @@ const ContactLayout = () => {
           <Title text="Channel" />
           <Channel />
         </div>
-        <div className="max-h-[38vh] overflow-y-auto scrollbar-hidden">
+        <div className="max-h-[25vh] xs:max-h-[38vh] overflow-y-auto scrollbar-hidden">
           <ContactList contacts={channel} isChannel={true} />
         </div>
       </div>

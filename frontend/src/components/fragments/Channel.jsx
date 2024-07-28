@@ -22,6 +22,13 @@ import { Button } from "../ui/button";
 import MultipleSelector from "../ui/multipleselect";
 import { addChannel } from "@/store/slices/chat-slices";
 import { useSocket } from "@/contexts/SocketContext";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalDescription,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "../ui/responsive-modal";
 
 const Channel = () => {
   const dispatch = useDispatch();
@@ -101,27 +108,27 @@ const Channel = () => {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <Dialog open={newChannelModal} onOpenChange={setNewChannelModal}>
-        <DialogContent className="bg-[#181920] border-none text-white w-full max-w-[400px] min-h-[400px] flex flex-col">
-          <DialogHeader>
-            <DialogTitle className={"text-center"}>
+      <ResponsiveModal open={newChannelModal} onOpenChange={setNewChannelModal}>
+        <ResponsiveModalContent className="bg-[#181920] border-none text-white w-full md:max-w-[500px] min-h-[400px] flex flex-col">
+          <ResponsiveModalHeader>
+            <ResponsiveModalTitle className={"text-center text-white"}>
               Please fill up the details for new channel.
-            </DialogTitle>
-            <DialogDescription></DialogDescription>
-          </DialogHeader>
-          <div className="mb-4">
+            </ResponsiveModalTitle>
+            <ResponsiveModalDescription></ResponsiveModalDescription>
+          </ResponsiveModalHeader>
+          <div className="">
             <Input
               placeholder="Channel Name..."
-              className="rounded-lg p-6 bg-[#2c2e3b] border-none"
+              className="rounded-lg p-6 bg-[#2c2e3b] border-none "
               onChange={(e) => setChannelName(e.target.value)}
               value={channelName}
             />
           </div>
           <div>
             <MultipleSelector
-              className="rounded-lg bg-[#2c2e3b] border-none py-2 text-white"
+              className="rounded-lg bg-[#2c2e3b]  border-none py-4 text-white"
               defaultOptions={allContact}
-              placeholder="Search Contacts"
+              placeholder="Search Contacts..."
               value={selectedContacts}
               onChange={setSelectedContacts}
               emptyIndicator={
@@ -139,8 +146,8 @@ const Channel = () => {
               Create Channel
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </ResponsiveModalContent>
+      </ResponsiveModal>
     </>
   );
 };

@@ -1,9 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar } from "@radix-ui/react-avatar";
 import { X } from "lucide-react";
-import { useEffect } from "react";
-import { useSocket } from "@/contexts/SocketContext";
-import { setOfflineStatus, setOnlineStatus } from "@/store/slices/users-slices";
 import { closeChat, setChatData } from "@/store/slices/chat-slices";
 import { AvatarImage } from "../ui/avatar";
 import { splitName } from "./NewDm";
@@ -16,6 +13,8 @@ const MessageHeader = () => {
   const chatType = useSelector((state) => state.chat.chatType);
 
   const onlineUsers = useSelector((state) => state.users.onlineUsers);
+
+  console.log(chatData);
 
   return (
     <div className="h-[10vh] border-b-2 border-[#2f303b] flex items-between px-20">
@@ -49,8 +48,8 @@ const MessageHeader = () => {
               </div>
             )}
           </div>
-          {chatData === "contact" ? (
-            <div className="flex items-center flex-col">
+          {chatType === "contact" ? (
+            <div className="flex items-start justify-center flex-col">
               <span className="font-medium">
                 {chatData.firstName
                   ? `${chatData.firstName} ${chatData.lastName}`

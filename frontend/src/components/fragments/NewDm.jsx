@@ -23,6 +23,13 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { useDispatch } from "react-redux";
 import { setChatData, setChatType } from "@/store/slices/chat-slices";
+import {
+  ResponsiveModal,
+  ResponsiveModalContent,
+  ResponsiveModalDescription,
+  ResponsiveModalHeader,
+  ResponsiveModalTitle,
+} from "../ui/responsive-modal";
 
 export const splitName = (firstName, lastName) => {
   const result = [];
@@ -100,14 +107,21 @@ const NewDm = () => {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <Dialog open={openNewContactModal} onOpenChange={setOpenNewContactModal}>
-        <DialogContent className="bg-[#181920] border-none text-white w-full max-w-[400px] min-h-[400px] flex flex-col">
-          <DialogHeader>
-            <DialogTitle className={"text-center"}>
+      <ResponsiveModal
+        open={openNewContactModal}
+        onOpenChange={setOpenNewContactModal}
+        className="bg-none"
+      >
+        <ResponsiveModalContent
+          side="bottom"
+          className="bg-[#181920] backdrop-blur-sm border-none text-white w-full md:max-w-[400px] min-h-[400px] flex flex-col"
+        >
+          <ResponsiveModalHeader>
+            <ResponsiveModalTitle className={"text-center text-white"}>
               Please select a contact
-            </DialogTitle>
-            <DialogDescription></DialogDescription>
-          </DialogHeader>
+            </ResponsiveModalTitle>
+            <ResponsiveModalDescription></ResponsiveModalDescription>
+          </ResponsiveModalHeader>
           <div className="mb-4">
             <Input
               placeholder="Search contacts..."
@@ -182,8 +196,8 @@ const NewDm = () => {
               </div>
             </ScrollArea>
           )}
-        </DialogContent>
-      </Dialog>
+        </ResponsiveModalContent>
+      </ResponsiveModal>
     </>
   );
 };
