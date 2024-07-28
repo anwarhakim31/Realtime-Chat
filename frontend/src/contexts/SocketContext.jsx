@@ -1,11 +1,14 @@
 import { selectedUserData } from "@/store/slices/auth-slices";
 import {
+  addChannel,
   addChannelInChannelList,
+  addContactInDmContactList,
   addMessage,
-  selectedChannels,
   selectedChatData,
   selectedChatMessage,
   selectedChatType,
+  selectedDirectMessageContacts,
+  setTrigger,
 } from "@/store/slices/chat-slices";
 import { HOST } from "@/utils/constant";
 import { useRef, useEffect, useContext, createContext } from "react";
@@ -14,7 +17,6 @@ import io from "socket.io-client";
 import Cookie from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { setOfflineStatus, setOnlineStatus } from "@/store/slices/users-slices";
-import { toast } from "sonner";
 
 const SocketContext = createContext(null);
 
@@ -26,7 +28,7 @@ const SocketProvider = ({ children }) => {
   const chatData = useSelector(selectedChatData);
   const chatMessage = useSelector(selectedChatType);
   const chatType = useSelector(selectedChatMessage);
-  const channel = useSelector(selectedChannels);
+  const contact = useSelector(selectedDirectMessageContacts);
   const dispatch = useDispatch();
   const cookie = Cookie.get("jwt");
 
@@ -52,12 +54,13 @@ const SocketProvider = ({ children }) => {
         }
       });
 
-      if (channel) {
-        socket.current.on("newChannel", (channel) => {
-          // Handle the new channel event
-          dispatch(addChannelInChannelList(channel));
-        });
-      }
+      socket.current.on("newChannel", (channel) => {
+        dispatch(addChannel(channel));
+      });
+      socket.current.on("dm-created", (message) => {
+        dispatch(addChannelInChannelList(message));
+        dispatch(setTrigger());
+      });
 
       return () => {
         socket.current.off("newChannel");
@@ -68,13 +71,9 @@ const SocketProvider = ({ children }) => {
     }
   }, [cookie, userData]);
 
-  console.log(channel);
-
   useEffect(() => {
     if (chatData) {
       const handleMessage = (message) => {
-        // console.log("Received message:", message);
-
         if (
           chatType !== undefined &&
           (chatData._id === message.sender._id ||
@@ -82,6 +81,7 @@ const SocketProvider = ({ children }) => {
         ) {
           dispatch(addMessage(message));
         }
+        dispatch(addContactInDmContactList({ userId: userData._id, message }));
       };
 
       const handleReceiveChannelMessage = (message) => {
@@ -92,6 +92,7 @@ const SocketProvider = ({ children }) => {
           dispatch(addMessage(message));
         }
         dispatch(addChannelInChannelList(message));
+        dispatch(setTrigger());
       };
 
       socket.current.on("receiveMessage", handleMessage);
@@ -107,6 +108,8 @@ const SocketProvider = ({ children }) => {
       };
     }
   }, [chatData, chatType, chatMessage]);
+
+  console.log(contact);
 
   return (
     <SocketContext.Provider value={socket.current}>

@@ -10,6 +10,7 @@ const initialState = {
   fileUploadingProgress: 0,
   fileDownloadingProgress: 0,
   channels: [],
+  trigger: 1,
 };
 
 const chatSlice = createSlice({
@@ -32,8 +33,33 @@ const chatSlice = createSlice({
         channels.unshift(data);
       }
     },
+    addContactInDmContactList: (state, action) => {
+      const { userId, message } = action.payload;
+
+      const fromId =
+        message.sender._id === userId
+          ? message.recipient._id
+          : message.sender._id;
+      const fromData =
+        message.sender._id === userId ? message.recipient : message.sender;
+
+      const dmContact = [...state.directMessagerContacts];
+      const index = dmContact.findIndex((contact) => contact._id === fromId);
+
+      if (index !== -1) {
+        const [existingContact] = dmContact.splice(index, 1);
+        dmContact.unshift(existingContact);
+      } else {
+        dmContact.unshift(fromData);
+      }
+
+      state.directMessagerContacts = dmContact;
+    },
     setChannel: (state, action) => {
       state.channels = action.payload;
+    },
+    setTrigger: (state, action) => {
+      state.trigger += 1;
     },
     addChannel: (state, action) => {
       state.channels.unshift(action.payload);
@@ -73,7 +99,7 @@ const chatSlice = createSlice({
           chatType === "channel" ? message.recipient : message.recipient._id,
         sender: chatType === "channel" ? message.sender : message.sender._id,
       };
-      // console.log(newMessage);
+
       state.chatMessage.push(newMessage);
     },
     closeChat: (state) => {
@@ -98,6 +124,8 @@ export const {
   addChannel,
   setChannel,
   addChannelInChannelList,
+  setTrigger,
+  addContactInDmContactList,
 } = chatSlice.actions;
 export default chatSlice.reducer;
 
@@ -113,3 +141,4 @@ export const selectedFileDownloadingProgress = (state) =>
 export const selectedFileUploadingProgress = (state) =>
   state.chat.fileUploadingProgress;
 export const selectedChannels = (state) => state.chat.channels;
+export const selectedTrigger = (state) => state.chat.trigger;

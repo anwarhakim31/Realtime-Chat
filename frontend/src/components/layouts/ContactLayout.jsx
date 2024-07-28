@@ -10,6 +10,7 @@ import {
   selectedChannels,
   selectedChatMessage,
   selectedDirectMessageContacts,
+  selectedTrigger,
   setChannel,
   setDirectMessagerContact,
 } from "@/store/slices/chat-slices";
@@ -21,6 +22,7 @@ const ContactLayout = () => {
   const directMessageContaacts = useSelector(selectedDirectMessageContacts);
   const dispatch = useDispatch();
   const channel = useSelector(selectedChannels);
+  const trigger = useSelector(selectedTrigger);
 
   useEffect(() => {
     const getContact = async () => {
@@ -67,7 +69,7 @@ const ContactLayout = () => {
 
     getContact();
     getChannel();
-  }, [selectedChannels, selectedDirectMessageContacts]);
+  }, [selectedChannels, selectedDirectMessageContacts, trigger]);
 
   return (
     <div className="relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-template border-r-2 border-[#2f303b] ">

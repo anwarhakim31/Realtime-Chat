@@ -46,6 +46,7 @@ const setupSocket = (server) => {
 
     if (recipientSocketId) {
       io.to(recipientSocketId).emit("receiveMessage", messageData);
+      io.to(recipientSocketId).emit("dm-created", messageData);
     }
     if (senderSocketId) {
       io.to(senderSocketId).emit("receiveMessage", messageData);
