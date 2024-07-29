@@ -29,6 +29,8 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "../ui/responsive-modal";
+import { useSelector } from "react-redux";
+import { selectedUserData } from "@/store/slices/auth-slices";
 
 const Channel = () => {
   const dispatch = useDispatch();
@@ -37,6 +39,7 @@ const Channel = () => {
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [allContact, setAllContact] = useState([]);
   const [channelName, setChannelName] = useState("");
+  const userData = useSelector(selectedUserData);
 
   useEffect(() => {
     const getData = async () => {
@@ -60,7 +63,7 @@ const Channel = () => {
     };
 
     getData();
-  }, []);
+  }, [userData]);
 
   const handleCreateChannel = async () => {
     try {

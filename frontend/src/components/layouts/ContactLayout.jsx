@@ -42,7 +42,7 @@ const ContactLayout = () => {
           dispatch(setDirectMessagerContact(data.contacts));
         }
       } catch (error) {
-        toast.log(error);
+        toast.error(error);
       }
     };
 

@@ -23,7 +23,7 @@ const createToken = (email, userId) => {
   if (!secret) {
     throw new Error("JWT_KEY is not defined");
   }
-  const jwtExpiration = 24 * 60 * 60;
+  const jwtExpiration = 24 * 60 * 60 * 1000;
   return jwt.sign({ email, userId }, secret, { expiresIn: jwtExpiration });
 };
 
