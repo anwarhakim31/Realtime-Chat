@@ -264,7 +264,7 @@ const Profile = () => {
         </div>
         <div className="w-full">
           <Button
-            className="h-16 w-full bg-purple-700 hover:bg-purple-900 disabled:bg-purple-500 transition-all duration-300"
+            className="p-6 text-xs w-full bg-purple-700 hover:bg-purple-900 disabled:bg-purple-500 transition-all duration-300"
             onClick={handleSaveChange}
             disabled={loading}
           >

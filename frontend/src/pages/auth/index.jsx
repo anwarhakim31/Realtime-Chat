@@ -209,7 +209,7 @@ const Auth = () => {
           </div>
         </div>
         <div className="hidden md:flex justify-center items-center">
-          <img src={Background} alt="background login" />
+          <img src={Background} alt="background login" loading="lazy" />
         </div>
       </div>
     </div>
