@@ -14,8 +14,6 @@ const setupSocket = (server) => {
   const userSocketMap = new Map();
 
   const disconnect = (socket) => {
-    // console.log("disconnect", socket.id);
-
     for (const [userId, socketId] of userSocketMap.entries()) {
       if (socketId === socket.id) {
         io.emit("userStatus", { userId, status: "offline" });
@@ -57,7 +55,6 @@ const setupSocket = (server) => {
     const { channelId, sender, content, messageType, fileUrl } = message;
 
     try {
-      // Membuat pesan baru
       const createdMessage = await Message.create({
         sender,
         recipient: null,
