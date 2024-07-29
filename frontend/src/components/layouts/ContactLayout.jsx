@@ -26,6 +26,11 @@ const ContactLayout = () => {
 
   useEffect(() => {
     const getContact = async () => {
+      const contactLS = JSON.parse(localStorage.getItem("contact"));
+
+      if (contactLS) {
+        localStorage.setItem("contact", JSON.stringify(contactLS));
+      }
       try {
         const res = await fetch(HOST + "/api/contacts/get-contact-for-dm", {
           method: "GET",
@@ -40,6 +45,7 @@ const ContactLayout = () => {
 
         if (data.contacts) {
           dispatch(setDirectMessagerContact(data.contacts));
+          localStorage.setItem("contact", JSON.stringify(data.contacts));
         }
       } catch (error) {
         toast.error(error);
@@ -47,6 +53,11 @@ const ContactLayout = () => {
     };
 
     const getChannel = async () => {
+      const channelLS = JSON.parse(localStorage.getItem("channel"));
+
+      if (channelLS) {
+        dispatch(setChannel(channelLS));
+      }
       try {
         const res = await fetch(HOST + "/api/channel/get-channel", {
           method: "GET",
@@ -61,6 +72,8 @@ const ContactLayout = () => {
 
         if (data.channel) {
           dispatch(setChannel(data.channel));
+
+          localStorage.setItem("channel", JSON.stringify(data.channel));
         }
       } catch (error) {
         toast.error(error);

@@ -12,11 +12,12 @@ import AuthRoute from "./routes/AuthRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import { useSelector } from "react-redux";
 import { selectedUserData, setUserData } from "./store/slices/auth-slices";
-import { useEffect } from "react";
+
 import { HOST } from "./utils/constant";
 
 import { useDispatch } from "react-redux";
 import { useState } from "react";
+import { useEffect } from "react";
 
 function App() {
   const userData = useSelector(selectedUserData);
