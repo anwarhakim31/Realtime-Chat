@@ -210,7 +210,7 @@ const MessageFragment = () => {
                 setImageUrl(message.fileUrl);
               }}
             >
-              <img src={message.fileUrl} height={300} width={300} alt="image" />
+              <img src={message.fileUrl} height={200} width={200} alt="image" />
             </div>
           )}
           {checkIfVideo(message.fileUrl) && (
@@ -221,11 +221,11 @@ const MessageFragment = () => {
                 setVideoUrl(message.fileUrl);
               }}
             >
-              <video width={300} height={300}>
+              <video width={220} height={220}>
                 <source src={message.fileUrl} type="video/mp4" />
               </video>
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <Play className="text-white w-10 h-10" />
+                <Play className="text-white w-5 h-5" />
               </div>
             </div>
           )}
@@ -245,7 +245,7 @@ const MessageFragment = () => {
                 />
               </div>
               <div className="absolute inset-0 flex items-center justify-center  bg-opacity-50">
-                <Play className="text-white w-10 h-10" />
+                <Play className="text-white w-5 h-5" />
               </div>
               <span className="text-sm mt-5">
                 {message.fileUrl.split("-").pop()}
@@ -255,15 +255,17 @@ const MessageFragment = () => {
 
           {checkIfDocument(message.fileUrl) && (
             <div className="flex items-center justify-center gap-4">
-              <span className="text-white/8- text-3xl bg-black/20 rounded-full p-3">
-                <FileText />
+              <span className="text-white/8- text-3xl bg-black/20 rounded-full p-2">
+                <FileText height={16} width={16} />
               </span>
-              <span>{message.fileUrl.split("-").pop()}</span>
+              <span className="text-sm">
+                {message.fileUrl.split("-").pop()}
+              </span>
               <span
                 onClick={() => handleDownloadFile(message.fileUrl)}
-                className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                className="bg-black/20 p-2  rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
               >
-                <Download />
+                <Download height={16} width={16} />
               </span>
             </div>
           )}
@@ -271,14 +273,16 @@ const MessageFragment = () => {
           {checkIfArchive(message.fileUrl) && (
             <div className="flex items-center justify-center gap-4">
               <span className="text-white/8- text-3xl bg-black/20 rounded-full p-3">
-                <FileArchive />
+                <FileArchive height={16} width={16} />
               </span>
-              <span>{message.fileUrl.split("-").pop()}</span>
+              <span className="text-sm">
+                {message.fileUrl.split("-").pop()}
+              </span>
               <span
                 onClick={() => handleDownloadFile(message.fileUrl)}
-                className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                className="bg-black/20 p-2 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
               >
-                <Download />
+                <Download height={16} width={16} />
               </span>
             </div>
           )}
@@ -304,7 +308,7 @@ const MessageFragment = () => {
               message.sender !== chatData._id
                 ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
                 : "bg-[#2e2b33]/5 text-white/80 border-[#ffffff]/20"
-            } border wore inline-block p-4 rounded my-1 max-w-[50%] break-wordss ml-10`}
+            } border wore inline-block p-2.5 text-sm rounded my-1 max-w-[50%] break-wordss ml-10`}
           >
             {message.content}
           </div>
@@ -327,8 +331,8 @@ const MessageFragment = () => {
               >
                 <img
                   src={message.fileUrl}
-                  height={300}
-                  width={300}
+                  height={200}
+                  width={200}
                   alt="image"
                 />
               </div>
@@ -341,11 +345,11 @@ const MessageFragment = () => {
                   setVideoUrl(message.fileUrl);
                 }}
               >
-                <video width={300} height={300}>
+                <video width={220} height={220}>
                   <source src={message.fileUrl} type="video/mp4" />
                 </video>
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                  <Play className="text-white w-10 h-10" />
+                  <Play className="text-white w-5 h-5" />
                 </div>
               </div>
             )}
@@ -365,7 +369,7 @@ const MessageFragment = () => {
                   />
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center  bg-opacity-50">
-                  <Play className="text-white w-10 h-10" />
+                  <Play className="text-white w-5 h-5" />
                 </div>
                 <span className="text-sm mt-5">
                   {message.fileUrl.split("-").pop()}
@@ -376,14 +380,16 @@ const MessageFragment = () => {
             {checkIfDocument(message.fileUrl) && (
               <div className="flex items-center justify-center gap-4">
                 <span className="text-white/8- text-3xl bg-black/20 rounded-full p-3">
-                  <FileText />
+                  <FileText height={16} width={16} />
                 </span>
-                <span>{message.fileUrl.split("-").pop()}</span>
+                <span className="text-sm">
+                  {message.fileUrl.split("-").pop()}
+                </span>
                 <span
                   onClick={() => handleDownloadFile(message.fileUrl)}
                   className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
                 >
-                  <Download />
+                  <Download height={16} width={16} />
                 </span>
               </div>
             )}
@@ -391,14 +397,16 @@ const MessageFragment = () => {
             {checkIfArchive(message.fileUrl) && (
               <div className="flex items-center justify-center gap-4">
                 <span className="text-white/8- text-3xl bg-black/20 rounded-full p-3">
-                  <FileArchive />
+                  <FileArchive height={16} width={16} />
                 </span>
-                <span>{message.fileUrl.split("-").pop()}</span>
+                <span className="text-sm">
+                  {message.fileUrl.split("-").pop()}
+                </span>
                 <span
                   onClick={() => handleDownloadFile(message.fileUrl)}
                   className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
                 >
-                  <Download />
+                  <Download height={16} width={16} />
                 </span>
               </div>
             )}
@@ -416,7 +424,7 @@ const MessageFragment = () => {
                 />
               )}
               <AvatarFallback
-                className={`uppercase h-8 w-8 flex-center text-xs  flex-center rounded-full ${getColor(
+                className={`uppercase h-5 w-5 flex-center text-xs  flex-center rounded-full ${getColor(
                   message.sender.color
                 )}`}
               >

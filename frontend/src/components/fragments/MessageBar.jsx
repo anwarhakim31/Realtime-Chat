@@ -153,7 +153,7 @@ const MessageBar = () => {
           onClick={handleAttachmentClick}
           className="text-neutral-500 rounded-sm p-1 focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
         >
-          <Paperclip className="w-5 h-5 sm:w-[25px] sm:h-[25px]" />
+          <Paperclip className="w-5 h-5 sm:w-[23px] sm:h-[23px]" />
         </button>
         <input
           type="file"
@@ -168,7 +168,7 @@ const MessageBar = () => {
             aria-label="emoji picker"
             className="text-neutral-500 rounded-sm p-1 focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
           >
-            <Sticker className="w-6 h-6 sm:w-[28px] sm:h-[28px]" />
+            <Sticker className="w-6 h-6 sm:w-[25px] sm:h-[25px]" />
           </button>
 
           <div
@@ -190,7 +190,7 @@ const MessageBar = () => {
         aria-label="send message"
         className="bg-[#8417ff] rounded-md flex-center p-2 sm:p-3 hover:bg-[#741bda] focus:bg-[#741bda] focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
       >
-        <SendHorizonal width={25} height={25} />
+        <SendHorizonal width={20} height={20} />
       </button>
     </div>
   );
