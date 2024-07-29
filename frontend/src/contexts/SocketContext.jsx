@@ -64,7 +64,7 @@ const SocketProvider = ({ children }) => {
         // console.log("Socket disconnected");
       };
     }
-  }, [userData, socket]);
+  }, [userData, cookie]);
 
   useEffect(() => {
     if (chatData) {
