@@ -52,13 +52,13 @@ Before you begin, ensure you have the following installed on your machine:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/anwarhakim31/Medicare..git Medicare
+   git clone https://github.com/anwarhakim31/Realtime-Chat.git Syncronus
    ```
 
 2. Navigate to  front project directory:
 
      ```bash
-     cd Realtime-Chat
+     cd Syncronus
      ```
 
 3.  Navigate to backend directory and install depedencies
