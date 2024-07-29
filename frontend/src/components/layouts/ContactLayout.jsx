@@ -17,12 +17,14 @@ import {
 import ContactList from "../fragments/ContactList";
 import Channel from "../fragments/Channel";
 import { toast } from "sonner";
+import { selectedUserData } from "@/store/slices/auth-slices";
 
 const ContactLayout = () => {
   const directMessageContaacts = useSelector(selectedDirectMessageContacts);
   const dispatch = useDispatch();
   const channel = useSelector(selectedChannels);
   const trigger = useSelector(selectedTrigger);
+  const userData = useSelector(selectedUserData);
 
   useEffect(() => {
     const getContact = async () => {
@@ -69,11 +71,11 @@ const ContactLayout = () => {
 
     getContact();
     getChannel();
-  }, [selectedChannels, selectedDirectMessageContacts, trigger]);
+  }, [userData, selectedChannels, selectedDirectMessageContacts, trigger]);
 
   return (
     <div className="relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-template border-r-2 border-[#2f303b] ">
-      <div className="p-3">
+      <div className="">
         <Logo />
       </div>
       <div className="my-5">

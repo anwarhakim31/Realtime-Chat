@@ -73,12 +73,12 @@ const ContactList = ({ contacts, isChannel = false }) => {
               </div>
             )}
             {isChannel ? (
-              <span className="truncate w-full md:max-w-[150px] lg:max-w-[180px] ">
+              <span className="truncate w-full text-sm md:max-w-[150px] lg:max-w-[180px] ">
                 {contact.name}
               </span>
             ) : (
               <div className="flex flex-col">
-                <span className="font-medium">
+                <span className="font-medium text-sm">
                   {contact.firstName
                     ? `${contact.firstName} ${contact.lastName}`
                     : contact.email}

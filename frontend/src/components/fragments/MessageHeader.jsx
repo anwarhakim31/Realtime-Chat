@@ -15,12 +15,12 @@ const MessageHeader = () => {
   const onlineUsers = useSelector((state) => state.users.onlineUsers);
 
   return (
-    <div className="h-[10vh] border-b-2 border-[#2f303b] flex items-between px-20">
+    <div className="h-[10vh] border-b-2 border-[#2f303b] flex items-between py-1 px-4 sm:px-20">
       <div className="flex gap-5 items-center w-full justify-between">
         <div className="flex gap-3 items-center justify-center">
-          <div className="w-12 h-12 rounded-full relative">
+          <div className="w-10 h-10 rounded-full relative">
             {chatType === "contact" ? (
-              <Avatar className="w-12 h-12 ">
+              <Avatar className="w-10 h-10 ">
                 {chatData.image ? (
                   <AvatarImage
                     src={chatData.image}
@@ -30,7 +30,7 @@ const MessageHeader = () => {
                   />
                 ) : (
                   <div
-                    className={`uppercase h-12 w-12 text-xs border flex-center rounded-full ${getColor(
+                    className={`uppercase h-10 w-10 text-xs border flex-center rounded-full ${getColor(
                       chatData.color
                     )}`}
                   >
@@ -48,7 +48,7 @@ const MessageHeader = () => {
           </div>
           {chatType === "contact" ? (
             <div className="flex items-start justify-center flex-col">
-              <span className="font-medium">
+              <span className="font-medium text-sm">
                 {chatData.firstName
                   ? `${chatData.firstName} ${chatData.lastName}`
                   : chatData.email}

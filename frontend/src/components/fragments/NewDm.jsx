@@ -125,7 +125,7 @@ const NewDm = () => {
           <div className="mb-4">
             <Input
               placeholder="Search contacts..."
-              className="rounded-lg p-6 bg-[#2c2e3b] border-none"
+              className="rounded-lg p-4 text-xs bg-[#2c2e3b] border-none"
               onChange={handleSearch}
               value={search}
             />
@@ -141,7 +141,7 @@ const NewDm = () => {
                   options={animationDefaultOption}
                 />
                 <div className="text-opacity-80 text-white flex flex-col gap-5 items-center mt-10 lg:text-2xl text-xl transition-all duration-300 text-center">
-                  <h3 className=" poppins-medium">
+                  <h3 className="text-sm poppins-medium">
                     Search new
                     <span className="text-purple-500"> contacts.</span>
                   </h3>

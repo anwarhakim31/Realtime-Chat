@@ -89,7 +89,7 @@ const Auth = () => {
 
   return (
     <div className="h-[100vh] w-[100vw] flex items-center justify-center">
-      <div className="min-h-[60vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2">
+      <div className="min-h-[65vh] md:min-h-[70vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-xl sm:rounded-2xl lg:rounded-3xl grid md:grid-cols-2">
         <div className="flex flex-col gap-10 items-center justify-center w-full">
           <div className="flex items-center justify-center flex-col">
             <div className="flex items-center justify-center">
@@ -97,7 +97,7 @@ const Auth = () => {
                 Syncronus.
               </div>
             </div>
-            <p className="font-medium text-sm md:text-xl text-center mt-2  max-w-[400px]">
+            <p className="font-medium text-xs md:text-base text-center mt-2 max-w-[220px] sm:max-w-[300px]  ">
               Fill in details to get started with the best chat app!
             </p>
           </div>
@@ -107,7 +107,7 @@ const Auth = () => {
               defaultValue="Login"
               onValueChange={setActiveTab}
             >
-              <TabsList className="grid grid-cols-2 bg-transparent rounded-none ">
+              <TabsList className="grid grid-cols-2 text-md bg-transparent rounded-none ">
                 <TabsTrigger
                   value="Login"
                   disabled={loading}
@@ -128,7 +128,7 @@ const Auth = () => {
                   <Input
                     type="email"
                     placeholder={"Email"}
-                    className="rounded-full p-6"
+                    className="rounded-full p-4 text-sm"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -136,14 +136,16 @@ const Auth = () => {
                   <Input
                     type="password"
                     placeholder={"Password"}
-                    className="rounded-full p-6"
+                    className="rounded-full p-4 text-sm"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={handleKeyDown}
                   />
                   <Button
                     type={"submit"}
-                    className={"rounded-full p-6 disabled:bg-primary/100"}
+                    className={
+                      "rounded-full p-4 text-sm disabled:bg-primary/100"
+                    }
                     onClick={handleLogin}
                     disabled={loading}
                   >
@@ -163,7 +165,7 @@ const Auth = () => {
                   <Input
                     type="email"
                     placeholder={"Email"}
-                    className="rounded-full p-6"
+                    className="rounded-full p-4 text-xs"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -171,7 +173,7 @@ const Auth = () => {
                   <Input
                     type="password"
                     placeholder={"Password"}
-                    className="rounded-full p-6"
+                    className="rounded-full p-4 text-xs"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -179,7 +181,7 @@ const Auth = () => {
                   <Input
                     type="password"
                     placeholder={"Confirm password"}
-                    className="rounded-full p-6"
+                    className="rounded-full p-4 text-xs"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPasswod(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -187,7 +189,9 @@ const Auth = () => {
                   <Button
                     type={"submit"}
                     disabled={loading}
-                    className={"rounded-full p-6 disabled:bg-primary/90"}
+                    className={
+                      "rounded-full p-4 text-xs disabled:bg-primary/90"
+                    }
                     onClick={handleSignUp}
                   >
                     {loading ? (
@@ -204,7 +208,7 @@ const Auth = () => {
             </Tabs>
           </div>
         </div>
-        <div className="hidden xl:flex justify-center items-center">
+        <div className="hidden md:flex justify-center items-center">
           <img src={Background} alt="background login" />
         </div>
       </div>

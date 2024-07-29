@@ -139,11 +139,11 @@ const MessageBar = () => {
   }, [isEmojiPicker]);
 
   return (
-    <div className="h-[5vh] sm:h-[10vh] bg-[#1c1d25] flex-center  px-8 mb-6 gap-6">
+    <div className="h-[5vh] sm:h-[5vh] bg-[#1c1d25] flex-center  px-8 mb-6 gap-6">
       <div className="flex-1 flex bg-[#2a2b33] rounded-md items-center  md:gap-6 pr-5">
         <input
           type="text"
-          className="w-full p-2.5 sm:p-5 bg-transparent rounded-md focus:border-none focus:outline-none"
+          className="w-full p-2.5 sm:p-3 text-sm bg-transparent rounded-md focus:border-none focus:outline-none"
           placeholder="Enter Message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -188,7 +188,7 @@ const MessageBar = () => {
       <button
         onClick={handleSendMessage}
         aria-label="send message"
-        className="bg-[#8417ff] rounded-md flex-center p-2 sm:p-5 hover:bg-[#741bda] focus:bg-[#741bda] focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
+        className="bg-[#8417ff] rounded-md flex-center p-2 sm:p-3 hover:bg-[#741bda] focus:bg-[#741bda] focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
       >
         <SendHorizonal width={25} height={25} />
       </button>

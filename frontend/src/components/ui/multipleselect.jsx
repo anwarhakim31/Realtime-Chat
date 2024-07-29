@@ -414,7 +414,7 @@ const MultipleSelector = React.forwardRef(
           {open && (
             <CommandPrimitive.List
               className={cn(
-                "absolute z-10 mt-16 max-h-28  w-full overflow-auto rounded-md border border-input bg-popover shadow-lg ring-1 ring-ring focus:outline-none",
+                "absolute z-10 mt-14  h-[25vh]  md:max-h-28  w-full overflow-auto rounded-md border border-input bg-popover shadow-lg ring-1 ring-ring focus:outline-none",
                 "animate-in animate-out fade-in-0 zoom-in-95 fade-out-0 zoom-out-95"
               )}
               style={{

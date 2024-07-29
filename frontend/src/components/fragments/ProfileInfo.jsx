@@ -51,9 +51,9 @@ const ProfileInfo = () => {
   };
 
   return (
-    <div className="absolute bottom-0 h-16 flex items-center justify-between px-10 w-full bg-[#2a2b33]">
+    <div className="absolute bottom-0 h-16 flex items-center justify-between px-4 w-full bg-[#2a2b33]">
       <div className="flex gap-3 items-center justify-center">
-        <div className="w-12 h-12 rounded-full relative">
+        <div className="w-10 h-10 rounded-full relative">
           <Avatar>
             {userData.image ? (
               <AvatarImage
@@ -64,7 +64,7 @@ const ProfileInfo = () => {
               />
             ) : (
               <div
-                className={`uppercase h-12 w-12  text-xs border flex-center rounded-full ${getColor(
+                className={`uppercase h-10 w-10  text-xs border flex-center rounded-full ${getColor(
                   userData.color
                 )}`}
               >
@@ -77,18 +77,18 @@ const ProfileInfo = () => {
         </div>
         <div>
           {userData.firstName && userData.lastName ? (
-            <span className="text-sm lg:text-base">{`${userData.firstName} ${userData.lastName}`}</span>
+            <span className="text-sm lg:text-sm">{`${userData.firstName} ${userData.lastName}`}</span>
           ) : (
             ""
           )}
         </div>
       </div>
-      <div className="flex gap-5">
+      <div className="flex gap-1">
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger className="p-2">
               <EditIcon
-                className="text-purple-500 text-medium w-6 h-6"
+                className="text-purple-500 text-medium w-5 h-5"
                 onClick={() => navigate("/profile")}
               />
             </TooltipTrigger>
@@ -99,9 +99,9 @@ const ProfileInfo = () => {
         </TooltipProvider>
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger className="p-2">
               <CirclePower
-                className="text-red-500 text-medium w-6 h-6"
+                className="text-red-500 text-medium w-5 h-5"
                 onClick={handleLogout}
               />
             </TooltipTrigger>

@@ -111,9 +111,11 @@ const Channel = () => {
         </Tooltip>
       </TooltipProvider>
       <ResponsiveModal open={newChannelModal} onOpenChange={setNewChannelModal}>
-        <ResponsiveModalContent className="bg-[#181920] border-none text-white w-full md:max-w-[500px] min-h-[400px] flex flex-col">
+        <ResponsiveModalContent className="bg-[#181920] border-none  text-white w-full md:max-w-[500px] min-h-[400px] flex flex-col">
           <ResponsiveModalHeader>
-            <ResponsiveModalTitle className={"text-center text-white"}>
+            <ResponsiveModalTitle
+              className={"text-center mb-1 space-y-1 text-white"}
+            >
               Please fill up the details for new channel.
             </ResponsiveModalTitle>
             <ResponsiveModalDescription></ResponsiveModalDescription>
@@ -121,14 +123,14 @@ const Channel = () => {
           <div className="">
             <Input
               placeholder="Channel Name..."
-              className="rounded-lg p-6 bg-[#2c2e3b] border-none "
+              className="rounded-lg p-4 text-xs bg-[#2c2e3b] border-none "
               onChange={(e) => setChannelName(e.target.value)}
               value={channelName}
             />
           </div>
           <div>
             <MultipleSelector
-              className="rounded-lg bg-[#2c2e3b]  border-none py-4 text-white"
+              className="rounded-lg bg-[#2c2e3b]  border-none py-3 text-xs text-white"
               defaultOptions={allContact}
               placeholder="Search Contacts..."
               value={selectedContacts}
