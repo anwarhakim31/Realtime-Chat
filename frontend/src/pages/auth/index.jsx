@@ -89,20 +89,15 @@ const Auth = () => {
 
   return (
     <div className="h-[100vh] w-[100vw] flex items-center justify-center">
-      <div className="min-h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2">
+      <div className="min-h-[60vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2">
         <div className="flex flex-col gap-10 items-center justify-center w-full">
           <div className="flex items-center justify-center flex-col">
             <div className="flex items-center justify-center">
-              <div className="text-2xl sm:text-5xl font-bold md:text-6xl">
-                Welcome
+              <div className="text-2xl sm:text-3xl font-semibold text-purple-700 md:text-4xl">
+                Syncronus.
               </div>
-              <img
-                src={victory}
-                alt="victory Emoji"
-                className="h-[50px] sm:h-[100px]"
-              />
             </div>
-            <p className="font-medium text-sm md:text-xl text-center">
+            <p className="font-medium text-sm md:text-xl text-center mt-2  max-w-[400px]">
               Fill in details to get started with the best chat app!
             </p>
           </div>
