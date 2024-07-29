@@ -24,10 +24,10 @@ app.use(
     credentials: true,
   })
 );
+app.set("trust proxy", 1);
 
 app.use(cookieParser());
 app.use(express.json());
-
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactsRoutes);
 app.use("/api/messages", messageRoutes);

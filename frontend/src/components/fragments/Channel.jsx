@@ -39,7 +39,6 @@ const Channel = () => {
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [allContact, setAllContact] = useState([]);
   const [channelName, setChannelName] = useState("");
-  const userData = useSelector(selectedUserData);
 
   useEffect(() => {
     const getData = async () => {
@@ -63,7 +62,7 @@ const Channel = () => {
     };
 
     getData();
-  }, [userData]);
+  }, []);
 
   const handleCreateChannel = async () => {
     try {

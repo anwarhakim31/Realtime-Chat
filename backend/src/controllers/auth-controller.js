@@ -23,7 +23,7 @@ const createToken = (email, userId) => {
   if (!secret) {
     throw new Error("JWT_KEY is not defined");
   }
-  const jwtExpiration = 24 * 60 * 60 * 1000;
+  const jwtExpiration = 24 * 60 * 60;
   return jwt.sign({ email, userId }, secret, { expiresIn: jwtExpiration });
 };
 
@@ -49,6 +49,9 @@ export const signup = async (req, res, next) => {
     const user = await newUser.save();
     res.cookie("jwt", createToken(email, user._id), {
       maxAge: maxAge,
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
     });
 
     res.status(201).json({
@@ -84,6 +87,9 @@ export const login = async (req, res, next) => {
 
     res.cookie("jwt", createToken(email, user.id), {
       maxAge,
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
     });
 
     const {
@@ -229,6 +235,8 @@ export const logout = async (req, res, next) => {
   try {
     res.cookie("jwt", "", {
       maxAge: 1,
+      secure: true,
+      sameSite: "None",
     });
 
     res.status(200).json({ success: true, message: "Succsesfully logout." });
