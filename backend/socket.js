@@ -55,6 +55,7 @@ const setupSocket = (server) => {
     const { channelId, sender, content, messageType, fileUrl } = message;
 
     try {
+      // Membuat pesan baru
       const createdMessage = await Message.create({
         sender,
         recipient: null,

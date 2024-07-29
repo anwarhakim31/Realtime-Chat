@@ -7,6 +7,7 @@ import {
   selectedChatData,
   selectedChatMessage,
   selectedChatType,
+  selectedTrigger,
   setTrigger,
 } from "@/store/slices/chat-slices";
 import { HOST } from "@/utils/constant";
@@ -14,7 +15,7 @@ import { useRef, useEffect, useContext, createContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import io from "socket.io-client";
 import Cookie from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+
 import { setOfflineStatus, setOnlineStatus } from "@/store/slices/users-slices";
 
 const SocketContext = createContext(null);
@@ -29,6 +30,7 @@ const SocketProvider = ({ children }) => {
   const chatType = useSelector(selectedChatMessage);
   const dispatch = useDispatch();
   const cookie = Cookie.get("jwt");
+  const trigger = useSelector(selectedTrigger);
 
   useEffect(() => {
     if (userData) {
@@ -64,7 +66,7 @@ const SocketProvider = ({ children }) => {
         // console.log("Socket disconnected");
       };
     }
-  }, [userData, cookie]);
+  }, [userData, cookie, trigger]);
 
   useEffect(() => {
     if (chatData) {
@@ -103,8 +105,6 @@ const SocketProvider = ({ children }) => {
       };
     }
   }, [chatData, chatType, chatMessage]);
-
-  console.log(socket.current);
 
   return (
     <SocketContext.Provider value={socket.current}>

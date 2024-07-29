@@ -6,13 +6,6 @@ import {
 } from "@radix-ui/react-tooltip";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import {
-  DialogHeader,
-  Dialog,
-  DialogDescription,
-  DialogContent,
-  DialogTitle,
-} from "../ui/dialog";
 import { Input } from "../ui/input";
 import { useEffect } from "react";
 import { HOST } from "@/utils/constant";
@@ -20,8 +13,7 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { Button } from "../ui/button";
 import MultipleSelector from "../ui/multipleselect";
-import { addChannel } from "@/store/slices/chat-slices";
-import { useSocket } from "@/contexts/SocketContext";
+import { addChannel, setTrigger } from "@/store/slices/chat-slices";
 import {
   ResponsiveModal,
   ResponsiveModalContent,
@@ -29,12 +21,12 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "../ui/responsive-modal";
-import { useSelector } from "react-redux";
-import { selectedUserData } from "@/store/slices/auth-slices";
+import { useSocket } from "@/contexts/SocketContext";
 
 const Channel = () => {
   const dispatch = useDispatch();
   const socket = useSocket();
+
   const [newChannelModal, setNewChannelModal] = useState(false);
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [allContact, setAllContact] = useState([]);
@@ -101,7 +93,10 @@ const Channel = () => {
         <Tooltip>
           <TooltipTrigger>
             <Plus
-              onClick={() => setNewChannelModal(true)}
+              onClick={() => {
+                dispatch(setTrigger());
+                setNewChannelModal(true);
+              }}
               className="text-neutral-400 font-light text-opacity-90 text-start hover:text-neutral-100 cursor-pointer transition-all duration-300"
             />
           </TooltipTrigger>

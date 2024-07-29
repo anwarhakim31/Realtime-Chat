@@ -6,9 +6,7 @@ import NewDm from "../fragments/NewDm";
 import { HOST } from "@/utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addChannelInChannelList,
   selectedChannels,
-  selectedChatMessage,
   selectedDirectMessageContacts,
   selectedTrigger,
   setChannel,

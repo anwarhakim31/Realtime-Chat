@@ -1,4 +1,3 @@
-import React from "react";
 import MessageHeader from "../fragments/MessageHeader";
 import MessageFragment from "../fragments/MessageFragment";
 import MessageBar from "../fragments/MessageBar";

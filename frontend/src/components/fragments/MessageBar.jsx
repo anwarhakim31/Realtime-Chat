@@ -24,7 +24,6 @@ const MessageBar = () => {
   const chatData = useSelector(selectedChatData);
   const chatType = useSelector(selectedChatType);
   const userData = useSelector(selectedUserData);
-  const chatMassage = useSelector(selectedChatMessage);
   const socket = useSocket();
   const [isEmojiPicker, setIsEmojiPicker] = useState(false);
   const dispatch = useDispatch();
