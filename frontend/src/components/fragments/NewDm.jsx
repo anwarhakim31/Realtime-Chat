@@ -6,13 +6,6 @@ import {
 } from "@radix-ui/react-tooltip";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import {
-  DialogHeader,
-  Dialog,
-  DialogDescription,
-  DialogContent,
-  DialogTitle,
-} from "../ui/dialog";
 import { Input } from "../ui/input";
 import Lottie2 from "react-lottie";
 import { animationDefaultOption, getColor } from "@/lib/utils";

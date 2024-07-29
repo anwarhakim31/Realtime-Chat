@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { Button } from "../ui/button";
 import MultipleSelector from "../ui/multipleselect";
 import { addChannel, setTrigger } from "@/store/slices/chat-slices";
+import { useSocket } from "@/contexts/SocketContext";
 import {
   ResponsiveModal,
   ResponsiveModalContent,
@@ -21,12 +22,12 @@ import {
   ResponsiveModalHeader,
   ResponsiveModalTitle,
 } from "../ui/responsive-modal";
-import { useSocket } from "@/contexts/SocketContext";
+import { useSelector } from "react-redux";
+import { selectedUserData } from "@/store/slices/auth-slices";
 
 const Channel = () => {
   const dispatch = useDispatch();
   const socket = useSocket();
-
   const [newChannelModal, setNewChannelModal] = useState(false);
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [allContact, setAllContact] = useState([]);
@@ -75,8 +76,8 @@ const Channel = () => {
         if (!res.ok) {
           throw new Error(data.errors);
         } else {
-          dispatch(addChannel(data.channel));
           socket.emit("channelCreated", data.channel);
+          dispatch(addChannel(data.channel));
           setChannelName("");
           setSelectedContacts([]);
           setNewChannelModal(false);
@@ -94,7 +95,7 @@ const Channel = () => {
           <TooltipTrigger>
             <Plus
               onClick={() => {
-                dispatch(setTrigger());
+                dispatch(setTrigger(true));
                 setNewChannelModal(true);
               }}
               className="text-neutral-400 font-light text-opacity-90 text-start hover:text-neutral-100 cursor-pointer transition-all duration-300"

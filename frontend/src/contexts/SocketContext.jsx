@@ -53,6 +53,7 @@ const SocketProvider = ({ children }) => {
 
       socket.current.on("newChannel", (channel) => {
         dispatch(addChannel(channel));
+        dispatch(setTrigger());
       });
       socket.current.on("dm-created", (message) => {
         dispatch(addChannelInChannelList(message));
@@ -66,7 +67,7 @@ const SocketProvider = ({ children }) => {
         // console.log("Socket disconnected");
       };
     }
-  }, [userData, cookie, trigger]);
+  }, [userData, cookie]);
 
   useEffect(() => {
     if (chatData) {
