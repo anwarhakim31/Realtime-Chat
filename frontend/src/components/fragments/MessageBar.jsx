@@ -139,7 +139,7 @@ const MessageBar = () => {
   }, [isEmojiPicker]);
 
   return (
-    <div className="h-[5vh] sm:h-[5vh] bg-[#1c1d25] flex-center  px-8 mb-6 gap-6">
+    <div className="h-[5vh] sm:h-[8vh] z-30 bg-[#1c1d25] flex-center  px-8 mb-2 gap-6">
       <div className="flex-1 flex bg-[#2a2b33] rounded-md items-center  md:gap-6 pr-5">
         <input
           type="text"
