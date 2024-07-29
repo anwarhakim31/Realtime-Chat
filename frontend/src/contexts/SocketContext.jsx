@@ -7,7 +7,6 @@ import {
   selectedChatData,
   selectedChatMessage,
   selectedChatType,
-  selectedDirectMessageContacts,
   setTrigger,
 } from "@/store/slices/chat-slices";
 import { HOST } from "@/utils/constant";
@@ -32,12 +31,10 @@ const SocketProvider = ({ children }) => {
   const cookie = Cookie.get("jwt");
 
   useEffect(() => {
-    if (cookie) {
-      const { userId } = jwtDecode(cookie);
-
+    if (userData) {
       socket.current = io(HOST, {
         withCredentials: true,
-        query: { userId },
+        query: { userId: userData._id },
       });
 
       socket.current.on("connect", () => {
@@ -67,7 +64,7 @@ const SocketProvider = ({ children }) => {
         // console.log("Socket disconnected");
       };
     }
-  }, [cookie]);
+  }, [userData]);
 
   useEffect(() => {
     if (chatData) {
@@ -106,6 +103,8 @@ const SocketProvider = ({ children }) => {
       };
     }
   }, [chatData, chatType, chatMessage]);
+
+  console.log(socket.current);
 
   return (
     <SocketContext.Provider value={socket.current}>
