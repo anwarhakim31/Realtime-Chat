@@ -308,7 +308,7 @@ const MessageFragment = () => {
               message.sender !== chatData._id
                 ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
                 : "bg-[#2e2b33]/5 text-white/80 border-[#ffffff]/20"
-            } border wore inline-block p-2.5 text-sm rounded my-1 max-w-[50%] break-wordss ml-10`}
+            } border wore inline-block p-2.5 text-sm rounded my-1 max-w-[50%] break-wordss `}
           >
             {message.content}
           </div>
@@ -424,7 +424,7 @@ const MessageFragment = () => {
                 />
               )}
               <AvatarFallback
-                className={`uppercase h-5 w-5 flex-center text-xs  flex-center rounded-full ${getColor(
+                className={`uppercase h-8 w-8 flex-center text-xs  flex-center rounded-full ${getColor(
                   message.sender.color
                 )}`}
               >
