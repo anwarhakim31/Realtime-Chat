@@ -430,7 +430,7 @@ const MessageFragment = () => {
               >
                 {message.sender.firstName && message.sender.lastName
                   ? splitName(message.sender.firstName, message.sender.lastName)
-                  : message.sender.email.charAt(0)}
+                  : message?.sender?.email?.charAt(0)}
               </AvatarFallback>
             </Avatar>
             <span className="text-sm text-white/60">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
