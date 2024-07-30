@@ -29,7 +29,7 @@ const ContactLayout = () => {
       const contactLS = JSON.parse(localStorage.getItem("contact"));
 
       if (contactLS) {
-        localStorage.setItem("contact", JSON.stringify(contactLS));
+        dispatch(setDirectMessagerContact(contactLS));
       }
       try {
         const res = await fetch(HOST + "/api/contacts/get-contact-for-dm", {
