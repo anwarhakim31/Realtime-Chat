@@ -15,7 +15,7 @@ import {
 import ContactList from "../fragments/ContactList";
 import Channel from "../fragments/Channel";
 import { toast } from "sonner";
-import { selectedUserData } from "@/store/slices/auth-slices";
+import { selectedUserData,setUserData } from "@/store/slices/auth-slices";
 
 const ContactLayout = () => {
   const directMessageContaacts = useSelector(selectedDirectMessageContacts);
@@ -48,6 +48,7 @@ const ContactLayout = () => {
           localStorage.setItem("contact", JSON.stringify(data.contacts));
         }
       } catch (error) {
+        dispatch(setUserData(undifined))
         toast.error(error.message);
       }
     };
@@ -76,6 +77,7 @@ const ContactLayout = () => {
           localStorage.setItem("channel", JSON.stringify(data.channel));
         }
       } catch (error) {
+        dispatch(setUserData(undifined))
         toast.error(error.message);
       }
     };

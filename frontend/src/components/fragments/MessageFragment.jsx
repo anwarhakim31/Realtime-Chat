@@ -80,6 +80,8 @@ const MessageFragment = () => {
 
         if (res.ok) {
           dispatch(setChatMessages(data.messages));
+        }else{
+          throw new Error(data.errors)
         }
       } catch (error) {
         toast.error(error.message);
