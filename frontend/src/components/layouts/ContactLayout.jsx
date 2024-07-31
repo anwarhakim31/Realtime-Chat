@@ -48,7 +48,7 @@ const ContactLayout = () => {
           localStorage.setItem("contact", JSON.stringify(data.contacts));
         }
       } catch (error) {
-        dispatch(setUserData(undifined))
+        dispatch(setUserData(undefined))
         toast.error(error.message);
       }
     };
@@ -77,7 +77,7 @@ const ContactLayout = () => {
           localStorage.setItem("channel", JSON.stringify(data.channel));
         }
       } catch (error) {
-        dispatch(setUserData(undifined))
+        dispatch(setUserData(undefined))
         toast.error(error.message);
       }
     };
