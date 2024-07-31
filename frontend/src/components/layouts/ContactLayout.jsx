@@ -48,7 +48,7 @@ const ContactLayout = () => {
           localStorage.setItem("contact", JSON.stringify(data.contacts));
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     };
 
@@ -76,7 +76,7 @@ const ContactLayout = () => {
           localStorage.setItem("channel", JSON.stringify(data.channel));
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     };
 

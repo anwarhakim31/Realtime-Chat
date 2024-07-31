@@ -34,6 +34,7 @@ const Channel = () => {
   const [channelName, setChannelName] = useState("");
 
   useEffect(() => {
+    dispatch(setTrigger(true));
     const getData = async () => {
       try {
         const res = await fetch(HOST + "/api/contacts/get-all-contacts", {
@@ -58,6 +59,7 @@ const Channel = () => {
   }, []);
 
   const handleCreateChannel = async () => {
+    
     try {
       if (channelName.length > 0 && selectedContacts.length > 0) {
         const res = await fetch(HOST + "/api/channel/create-channel", {
@@ -95,7 +97,7 @@ const Channel = () => {
           <TooltipTrigger>
             <Plus
               onClick={() => {
-                dispatch(setTrigger(true));
+                
                 setNewChannelModal(true);
               }}
               className="text-neutral-400 font-light text-opacity-90 text-start hover:text-neutral-100 cursor-pointer transition-all duration-300"
