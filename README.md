@@ -1,8 +1,8 @@
-# Syncronus. MongoDB Express React Node project
+## Syncronus. MongoDB Express React Node project
 
 Syncronus is a Realtime Chat App. which features message channels & direct messages to other users including emoji, upload files, download files in realtime.
 
-# The dependencies that this project uses:
+## The dependencies that this project uses:
 
 *Frontend*
 
