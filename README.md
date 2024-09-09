@@ -6,7 +6,7 @@ Syncronus is a Realtime Chat App. which features message channels & direct messa
 
 *Frontend*
 
--vite For building and bundling the application
+
 
 -react-router-dom: For routing
 
@@ -80,21 +80,21 @@ Before you begin, ensure you have the following installed on your machine:
 
 1. Create a .env file in the root backend of your project.
 
-    PORT="2001"
+    PORT="8080"
    
-    JWT_KEY="(30219321#%$!#@1313ladkl12!@#!)"
+    JWT_KEY=
    
     ORIGIN="http://localhost:5173"
    
-    DATABASE_URL="mongodb://:@ac-vkeqbdg-shard-00-00.u7kz2in.mongodb.net:27017,ac-vkeqbdg-shard-00-01.u7kz2in.mongodb.net:27017,ac-vkeqbdg-shard-00-02.u7kz2in.mongodb.net:27017/ChatApp?replicaSet=atlas-c8qsll-shard-0&ssl=true&authSource=admin&retryWrites=true&w=majority&appName=Syth"
+    DATABASE_URL=
    
-    AWS_ACCESS_KEY_ID= rahasia
+    AWS_ACCESS_KEY_ID=
    
-    AWS_SECRET_ACCESS_KEY= rahasia
+    AWS_SECRET_ACCESS_KEY=
    
-    AWS_REGION=ap-southeast-2
+    AWS_REGION=
    
-    AWS_S3_BUCKET=syncrons
+    AWS_S3_BUCKET=
 
 3. Create a .env file in the root frontend of your project.
     
